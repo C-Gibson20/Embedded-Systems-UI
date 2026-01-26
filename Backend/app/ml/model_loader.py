@@ -5,7 +5,8 @@ import torch
 from pathlib import Path
 
 ckpt_path = Path(__file__).parent / "saved_models" / "efficientnet_best2.ckpt"
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu")
 
 @lru_cache(maxsize=1)
 def load_model():

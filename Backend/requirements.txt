@@ -1,5 +1,12 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 fastapi
 uvicorn[standard]
 gunicorn
 python-multipart
 pillow
+pandas 
+openpyxl
+torch==2.10.0+cpu
+torchvision==0.25.0+cpu
+pytorch-lightning
