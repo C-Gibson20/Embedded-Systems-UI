@@ -63,7 +63,8 @@ export default function App() {
  
   return (
     <div className="app">
-      <ImageBackground imageUrl="/background_image.png" dim={0.45} />
+      <ImageBackground imageUrl={`${import.meta.env.BASE_URL}background_image.png`} dim={0.45} />
+      {/* <ImageBackground imageUrl="/background_image.png" dim={0.45} /> */}
       {/* <VideoBackground dim={0.6} /> */}
 
       <div className="app__content">
