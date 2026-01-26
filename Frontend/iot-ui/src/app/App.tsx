@@ -6,7 +6,7 @@ import { analyzeImage } from "../lib/api/analyze";
 import type { AnalysisResult } from "../lib/Types";
 import { ImageBackground } from "../components/ImageBackground";
 import "../styles/App.css";
-import { VideoBackground } from "../components/VideoBackground";
+// import { VideoBackground } from "../components/VideoBackground";
 
 export default function App() {
   const [file, setFile] = useState<File | null>(null);
