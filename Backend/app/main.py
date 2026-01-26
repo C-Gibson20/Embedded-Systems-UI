@@ -11,7 +11,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "https://c-gibson20.github.io",
-        ],
+        "https://www.c-gibson20.github.io",        
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
