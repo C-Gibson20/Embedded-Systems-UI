@@ -11,7 +11,7 @@ from app.ml.plant_care import plant_care_df
 
 name_label_map = {
     "haworthia_pumila": "Haworthia Pumila",
-    "echeveria_lilacina": "Echeveria Lilacina",
+    "echeveria_lilicana": "Echeveria Lilicana",
     "fittonia_albivenis": "Fittonia Albivenis",
     "corriandum_sativum": "Coriandrum Sativum",
     "salvia_officinalis": "Salvia Officinalis",
