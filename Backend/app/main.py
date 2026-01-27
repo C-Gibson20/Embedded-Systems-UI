@@ -13,7 +13,7 @@ app.add_middleware(
         "https://c-gibson20.github.io",
         "https://www.c-gibson20.github.io",        
     ],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
