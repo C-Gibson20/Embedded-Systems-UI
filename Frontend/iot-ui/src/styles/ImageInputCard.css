@@ -75,6 +75,40 @@
     0 0 0.5rem rgba(255, 255, 255, 0.10);
 }
 
+.pi-image-card__button {
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.72);
+
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.pi-image-card__button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
+
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.08),
+    0 0 0.5rem rgba(255, 255, 255, 0.12);
+  transform: scale(1.01);
+}
+
+.pi-image-card__button:focus {
+  outline: none;
+}
+.pi-image-card__button:focus-visible {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.14),
+    0 0 0.5rem rgba(255, 255, 255, 0.10);
+}
+
 .image-card__preview {
   border-radius: 0.5rem;
   padding: 1rem;
