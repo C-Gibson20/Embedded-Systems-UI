@@ -5,6 +5,8 @@ import { ResultsCard } from "../components/ResultsCard";
 import { analyzeImage } from "../lib/api/analyze";  
 import type { AnalysisResult } from "../lib/Types";
 import { ImageBackground } from "../components/ImageBackground";
+import { triggerCapture, pollForResult } from "../lib/api/capture"
+import { getStoredPiImageUrl } from "../lib/api/piImage";
 import "../styles/App.css";
 // import { VideoBackground } from "../components/VideoBackground";
 
@@ -17,6 +19,9 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
 
   const [hasRunForCurrentImage, setHasRunForCurrentImage] = useState(false);
+
+  const [piImageUrl, setPiImageUrl] = useState<string | null>(null);
+  const displayImageUrl = imageUrl ?? piImageUrl;
 
   // Create/revoke object URL cleanly
   useEffect(() => {
@@ -52,8 +57,33 @@ export default function App() {
     }
   }
 
+  async function runAnalysisCapture() {
+    if (isBusy) return;
+
+    setIsBusy(true);
+    setError(null);
+    setResult(null);
+    setHasRunForCurrentImage(true);
+
+    try {
+      const deviceId = "pi-01";
+      await triggerCapture(deviceId);
+      const r = await pollForResult(deviceId, { timeoutMs: 90000, pollMS: 1000 });
+      setResult(r);
+
+      setFile(null);
+      setPiImageUrl(getStoredPiImageUrl(deviceId));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      setHasRunForCurrentImage(false);
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
   function clearAll() {
     setFile(null);
+    setPiImageUrl(null);
     setResult(null);
     setError(null);
     setHasRunForCurrentImage(false);
@@ -78,12 +108,14 @@ export default function App() {
 
           <div className="app__grid">
             <ImageInputCard
-              imageUrl={imageUrl}
+              imageUrl={displayImageUrl}
               onPickFile={(f) => {
+                setPiImageUrl(null);
                 setFile(f);
                 setResult(null);
                 setError(null);
               }}
+              onTakePhoto={runAnalysisCapture}
               onClear={clearAll}
               isBusy={isBusy}
             />

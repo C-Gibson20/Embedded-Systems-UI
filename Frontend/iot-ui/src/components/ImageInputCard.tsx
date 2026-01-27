@@ -4,6 +4,7 @@ import "../styles/ImageInputCard.css";
 type Props = {
   imageUrl: string | null;
   onPickFile: (file: File) => void;
+  onTakePhoto: () => void;
   onClear: () => void;
   isBusy?: boolean;
 };
@@ -11,6 +12,7 @@ type Props = {
 export function ImageInputCard({
   imageUrl,
   onPickFile,
+  onTakePhoto,
   onClear,
   isBusy,
 }: Props) {
@@ -34,6 +36,15 @@ export function ImageInputCard({
             type="button"
           >
             Choose Image
+          </button>
+
+          <button
+            className="pi-image-card__button"
+            onClick={onTakePhoto}
+            disabled={isBusy}
+            type="button"
+          >
+            Take Photo
           </button>
 
           {imageUrl && (
