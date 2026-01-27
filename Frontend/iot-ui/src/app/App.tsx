@@ -5,7 +5,7 @@ import { ResultsCard } from "../components/ResultsCard";
 import { analyzeImage } from "../lib/api/analyze";  
 import type { AnalysisResult } from "../lib/Types";
 import { ImageBackground } from "../components/ImageBackground";
-import { triggerCapture, pollForResult } from "../lib/api/capture"
+import { pollForResult } from "../lib/api/capture"
 import { getStoredPiImageUrl } from "../lib/api/piImage";
 import "../styles/App.css";
 // import { VideoBackground } from "../components/VideoBackground";
@@ -67,8 +67,7 @@ export default function App() {
 
     try {
       const deviceId = "pi-01";
-      await triggerCapture(deviceId);
-      const r = await pollForResult(deviceId, { timeoutMs: 90000, pollMS: 1000 });
+      const r = await pollForResult(deviceId, { timeoutMs: 90000, pollMs: 1000 });
       setResult(r);
 
       setFile(null);

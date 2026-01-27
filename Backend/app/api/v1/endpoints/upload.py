@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, UploadFile, File, Header
 from app.core.job_store import jobs
 from app.services.analyze_service import analyze_image
 from app.core.image_store import image_store
+from fastapi.concurrency import run_in_threadpool
 
 router = APIRouter()
 PI_KEY = os.environ.get("PI_KEY", "")
@@ -33,7 +34,7 @@ async def upload_file(
     image_bytes = await file.read()
     image_store.set_image(device_id, file.content_type, image_bytes)
     try:
-        result = analyze_image(image_bytes)
+        result = await run_in_threadpool(analyze_image, image_bytes)
         jobs.set_result(device_id, job_id, result)
         return {"ok": True}
     except Exception as e:

@@ -1,5 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_BASE as string;
+import { API_BASE } from "./base.ts"; 
 
 export function getStoredPiImageUrl(deviceId: string) {
-    return `${API_BASE}/api/v1/pi-image/${encodeURIComponent(deviceId)}`;
+    return `${API_BASE}/api/v1/pi/stored_image/${encodeURIComponent(deviceId)}`;
 }

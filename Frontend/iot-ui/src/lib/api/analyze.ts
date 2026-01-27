@@ -1,8 +1,6 @@
 import type { AnalysisResult } from "../Types";
 
-const API_BASE =
-  // import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
-  import.meta.env.VITE_API_BASE_URL ?? "https://embedded-systems-ui.onrender.com";
+import { API_BASE } from "./base.ts"; 
 
 export async function analyzeImage(file: File): Promise<AnalysisResult> {
   const formData = new FormData();
