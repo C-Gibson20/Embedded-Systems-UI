@@ -25,13 +25,11 @@ class PIConnectionManager:
             self._connections.pop(device_id, None)
 
     async def send_capture_command(self, device_id, job_id):
-        async with self._lock:
-            ws = self._connections.get(device_id)
-
-        if not ws:
+        conn = self._connections.get(device_id)
+        if not conn:
             return False
         
-        await ws.send_json({"type": "capture", "job_id": job_id})
+        await conn.websocket.send_json({"type": "capture", "job_id": job_id})
         return True
     
     async def is_paired(self, device_id, pairing_secret):
