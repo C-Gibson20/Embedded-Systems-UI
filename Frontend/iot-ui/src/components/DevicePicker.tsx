@@ -89,9 +89,11 @@ export function DevicePicker({
           role="dialog"
           aria-modal="true"
           aria-label="Device settings"
-          className="device-modal__backdrop device-modal__backdrop--open"
+          className="device-modal__backdrop"
         >
-          <div className="device-modal__panel device-modal__panel--open">
+          <div 
+            className="device-modal__panel"
+          >
 
             {/* Tabs */}
             <div className="device-modal__section-tabs">
@@ -229,7 +231,6 @@ export function DevicePicker({
     </div>
   );
 }
-
 
 // import {useMemo, useState} from "react";
 // import type { SavedDevice } from "../lib/devices/storage";

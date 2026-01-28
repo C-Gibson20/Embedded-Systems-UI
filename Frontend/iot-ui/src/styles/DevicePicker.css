@@ -1,3 +1,14 @@
+/* Panel base */
+.device-modal__panel {
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-top: 0.2rem;
+
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 1.75rem 4rem rgba(0, 0, 0, 0.70);
+}
+
 .device-picker {
   border-radius: 0.75rem;
   padding: 1.125rem;
