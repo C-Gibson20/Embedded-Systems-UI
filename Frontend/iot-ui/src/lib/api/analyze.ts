@@ -17,7 +17,7 @@ export async function analyzeImage(file: File): Promise<AnalysisResult> {
       const err = await response.json();
       detail = err.detail ?? detail;
     } catch {
-      /* ignore */
+      /*  */
     }
     throw new Error(detail);
   }

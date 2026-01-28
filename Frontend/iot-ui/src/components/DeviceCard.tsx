@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import type { SavedDevice } from "../lib/devices/storage";
-import "../styles/DevicePicker.css";
+import "../styles/DeviceCard.css";
 
 type Props = {
   devices: SavedDevice[];
@@ -11,7 +11,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export function DevicePicker({
+export function DeviceCard({
   devices,
   selectedId,
   onSelect,
@@ -19,16 +19,13 @@ export function DevicePicker({
   onRemove,
   disabled,
 }: Props) {
-  // Modal state
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [settingsTab, setSettingsTab] = useState<"add" | "remove">("add");
 
-  // Add device form state
   const [name, setName] = useState("");
   const [deviceId, setDeviceId] = useState("");
   const [pairingSecret, setPairingSecret] = useState("");
 
-  // Remove device state (lets you remove any device, not only selected)
   const [removeId, setRemoveId] = useState<string>("");
 
   const canAdd = useMemo(
@@ -48,17 +45,15 @@ export function DevicePicker({
   }
 
   return (
-    <div className="device-picker" style={{ display: "grid", gap: 10 }}>
-      <div className="device-picker__header" style={{ display: "grid", gap: 4 }}>
-        <div className="device-picker__title">Device</div>
-        <div className="device-picker__subtitle">
-          Select a PlantIO device from the list, or manage devices in settings.
-        </div>
+    <div className="device-card">
+      <div>
+        <div className="device-card__title">Device</div>
+        <div>Select a PlantIO device from the list, or manage devices in settings.</div>
       </div>
 
-      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+      <div className="device-card__controls">
         <select
-          className="device-picker__select"
+          className="device-card__select"
           disabled={disabled || devices.length === 0}
           value={selectedId ?? ""}
           onChange={(e) => onSelect(e.target.value)}
@@ -76,14 +71,13 @@ export function DevicePicker({
         <button
           type="button"
           disabled={disabled}
-          className="device-settings__button"
+          className="device-card__button"
           onClick={() => setIsSettingsOpen(true)}
         >
-          Device settings
+          Device Settings
         </button>
       </div>
-
-      {/* Modal / Popup */}
+      
       {isSettingsOpen && (
         <div
           role="dialog"
@@ -91,11 +85,7 @@ export function DevicePicker({
           aria-label="Device settings"
           className="device-modal__backdrop"
         >
-          <div 
-            className="device-modal__panel"
-          >
-
-            {/* Tabs */}
+          <div className="device-modal__panel">
             <div className="device-modal__section-tabs">
               <button
                 type="button"
@@ -122,34 +112,33 @@ export function DevicePicker({
               </button>
             </div>
 
-            {/* Content */}
             {settingsTab === "add" ? (
-              <div style={{ display: "grid", gap: 8 }}>
+              <div className="device-modal__inputs">
                 <input
-                  className={"device-modal__input"}
+                  className="device-modal__input"
                   disabled={disabled}
                   placeholder="Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <input
-                  className={"device-modal__input"}
+                  className="device-modal__input"
                   disabled={disabled}
                   placeholder="Device ID"
                   value={deviceId}
                   onChange={(e) => setDeviceId(e.target.value)}
                 />
                 <input
-                  className={"device-modal__input"}
+                  className="device-modal__input"
                   disabled={disabled}
                   placeholder="Pairing Authentication"
                   value={pairingSecret}
                   onChange={(e) => setPairingSecret(e.target.value)}
                 />
 
-                <div className="device-modal__actions">
+                <div>
                   <button
-                    className="add-device__button"
+                    className="device-card__button"
                     disabled={disabled || !canAdd}
                     type="button"
                     onClick={() => {
@@ -168,8 +157,8 @@ export function DevicePicker({
                   </button>
 
                   <button
+                    className="device-card__button"
                     type="button"
-                    className="device-modal__secondary"
                     onClick={closeSettings}
                   >
                     Cancel
@@ -177,17 +166,16 @@ export function DevicePicker({
                 </div>
               </div>
             ) : (
-              <div style={{ display: "grid", gap: 10 }}>
+              <div className="device-modal__inputs">
                 <div className="device-modal__hint">
                   Select device to remove.
                 </div>
 
                 <select
-                  className="device-picker__select"
+                  className="device-card__select"
                   disabled={disabled || devices.length === 0}
                   value={removeId || selectedId || ""}
                   onChange={(e) => setRemoveId(e.target.value)}
-                  style={{ display: "flex", gap: 8, alignItems: "center" }}
                 >
                   <option value="" disabled>
                     Select device...
@@ -201,7 +189,7 @@ export function DevicePicker({
 
                 <div className="device-modal__actions">
                   <button
-                    className="remove-device__button"
+                    className="device-card__button"
                     disabled={disabled || !canRemove}
                     type="button"
                     onClick={() => {
@@ -216,8 +204,8 @@ export function DevicePicker({
                   </button>
 
                   <button
+                    className="device-card__button"
                     type="button"
-                    className="device-modal__secondary"
                     onClick={closeSettings}
                   >
                     Cancel
@@ -231,77 +219,3 @@ export function DevicePicker({
     </div>
   );
 }
-
-// import {useMemo, useState} from "react";
-// import type { SavedDevice } from "../lib/devices/storage";
-// import "../styles/DevicePicker.css";
-
-// type Props = {
-//     devices: SavedDevice[];
-//     selectedId: string | null;
-//     onSelect: (deviceId: string) => void;
-//     onAdd: (d: SavedDevice) => void;
-//     onRemove: (deviceId: string) => void;
-//     disabled?: boolean;
-// }
-
-// export function DevicePicker({ devices, selectedId, onSelect, onAdd, onRemove, disabled }: Props) {
-//     const [name, setName] = useState("");
-//     const [deviceId, setDeviceId] = useState("");
-//     const [pairingSecret, setPairingSecret] = useState("");
-
-//     const canAdd = useMemo(
-//         () => !!name.trim() && !!deviceId.trim() && !!pairingSecret.trim(), 
-//         [name, deviceId, pairingSecret]
-//     );
-
-// return (
-//     <div style={{ display: "grid", gap: 8 }}>
-//       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-//         <select
-//           className="device-picker__select"
-//           disabled={disabled || devices.length === 0}
-//           value={selectedId ?? ""}
-//           onChange={(e) => onSelect(e.target.value)}
-//         >
-//           <option value="" disabled>
-//             Select device…
-//           </option>
-//           {devices.map((d) => (
-//             <option key={d.deviceId} value={d.deviceId}>
-//               {d.name} ({d.deviceId})
-//             </option>
-//           ))}
-//         </select>
-
-//         {selectedId && (
-//           <button className="remove-device__button" disabled={disabled} onClick={() => onRemove(selectedId)} type="button">
-//             Remove
-//           </button>
-//         )}
-//       </div>
-
-//       <div style={{ display: "grid", gap: 6 }}>
-//         <div className="device-picker__title">Select Device</div>
-//         <div className="device-picker__subtitle">
-//           Select a PlantIO device from the list or pair new device.
-//         </div>
-//         <input disabled={disabled} placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-//         <input disabled={disabled} placeholder="Device ID" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} />
-//         <input disabled={disabled} placeholder="Pairing Authentication" value={pairingSecret} onChange={(e) => setPairingSecret(e.target.value)} />
-
-//         <button
-//           className="add-device__button"
-//           disabled={disabled || !canAdd}
-//           type="button"
-//           onClick={() => {
-//             onAdd({ name: name.trim(), deviceId: deviceId.trim(), pairingSecret: pairingSecret.trim() });
-//             setName(""); setDeviceId(""); setPairingSecret("");
-//           }}
-//         >
-//           Add device
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }    

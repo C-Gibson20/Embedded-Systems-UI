@@ -28,7 +28,7 @@ export function ImageInputCard({
           </div>
         </div>
 
-        <div className="image-card__actions">
+        <div>
           <button
             className="image-card__button"
             onClick={() => inputRef.current?.click()}
@@ -39,7 +39,7 @@ export function ImageInputCard({
           </button>
 
           <button
-            className="pi-image-card__button"
+            className="image-card__button"
             onClick={onTakePhoto}
             disabled={isBusy}
             type="button"

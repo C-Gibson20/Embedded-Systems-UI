@@ -1,34 +1,30 @@
 import { useEffect, useMemo, useState } from "react";
 import { ImageInputCard } from "../components/ImageInputCard";
 import { ResultsCard } from "../components/ResultsCard";
-// import { mockProcessImage } from "../lib/MockProcessing";
+import { ImageBackground } from "../components/ImageBackground";
+import { DeviceCard } from "../components/DeviceCard";
 import { analyzeImage } from "../lib/api/analyze";  
 import type { AnalysisResult } from "../lib/Types";
-import { ImageBackground } from "../components/ImageBackground";
 import { pollForResult } from "../lib/api/capture"
 import { getStoredPiImageUrl } from "../lib/api/piImage";
 import { loadDevices, saveDevices, type SavedDevice } from "../lib/devices/storage";
-import { DevicePicker } from "../components/DevicePicker";
 import "../styles/App.css";
-// import { VideoBackground } from "../components/VideoBackground";
 
 export default function App() {
   const [file, setFile] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
+  
   const [isBusy, setIsBusy] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   const [hasRunForCurrentImage, setHasRunForCurrentImage] = useState(false);
 
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [piImageUrl, setPiImageUrl] = useState<string | null>(null);
   const displayImageUrl = imageUrl ?? piImageUrl;
 
   const [devices, setDevices] = useState<SavedDevice[]>(() => loadDevices());
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(() => loadDevices()[0]?.deviceId ?? null);
 
-  // Create/revoke object URL cleanly
   useEffect(() => {
     if (!file) {
       setImageUrl(null);
@@ -48,6 +44,8 @@ export default function App() {
 
   const canAnalyze = useMemo(() => !!file && !isBusy, [file, isBusy]);
 
+  const showRunButton = !!file && !hasRunForCurrentImage;
+
   async function runAnalysis() {
     if (!file || isBusy) return;
 
@@ -58,7 +56,6 @@ export default function App() {
     setResult(null);
 
     try {
-      // const r = await mockProcessImage(file);
       const r = await analyzeImage(file);
       setResult(r);
     } catch (e) {
@@ -86,7 +83,6 @@ export default function App() {
       const { deviceId, pairingSecret } = selectedDevice;
       const r = await pollForResult(deviceId, pairingSecret, { timeoutMs: 90000, pollMs: 1000 });
       setResult(r);
-
       setFile(null);
       setPiImageUrl(getStoredPiImageUrl(deviceId));
     } catch (e) {
@@ -105,14 +101,10 @@ export default function App() {
     setHasRunForCurrentImage(false);
   }
 
-  const showRunButton = !!file && !hasRunForCurrentImage;
- 
   return (
     <div className="app">
       <ImageBackground imageUrl={`${import.meta.env.BASE_URL}background_image.png`} dim={0.45} />
-      {/* <ImageBackground imageUrl="/background_image.png" dim={0.45} /> */}
-      {/* <VideoBackground dim={0.6} /> */}
-
+      
       <div className="app__content">
         <div className="app__container">
           <header className="app__header">
@@ -123,7 +115,7 @@ export default function App() {
           </header>
 
           <div className="app__device-picker">
-            <DevicePicker
+            <DeviceCard
               devices={devices}
               selectedId={selectedDeviceId}
               onSelect={(id) => setSelectedDeviceId(id)}

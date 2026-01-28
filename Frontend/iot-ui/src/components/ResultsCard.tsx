@@ -34,9 +34,7 @@ export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysi
 
       <div className="results-card__body">
         {isBusy && (
-          <div className="results-card__text">
-            Processing…
-          </div>
+          <div>Processing…</div>
         )}
 
         {!isBusy && error && (
@@ -46,9 +44,7 @@ export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysi
         )}
 
         {!isBusy && !error && !result && (
-          <div className="results-card__text results-card__muted">
-            Select an image, then run analysis.
-          </div>
+          <div>Select an image, then run analysis.</div>
         )}
 
         {!isBusy && result && (

@@ -5,6 +5,9 @@
   background: rgba(8, 15, 12, 0.78);
   backdrop-filter: blur(14px) saturate(120%);
 
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 1.2rem;
+
   border: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow:
     0 1.25rem 3rem rgba(0, 0, 0, 0.55),
@@ -33,23 +36,17 @@
 .image-card__title {
   font-size: 1.8rem;
   font-weight: 650; 
-  opacity: 0.82;
-}
-
-.image-card__subtitle {
-  font-size: 1.2rem;
-  opacity: 0.72;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .image-card__button {
-  border-radius: 0.5rem;
   margin-top: 0.5rem;
   margin-right: 0.5rem;
   padding: 0.55rem 0.85rem;
-  font-size: 1.2rem;
+
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.72);
+  border-radius: 0.5rem;
 
   cursor: pointer;
   transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
@@ -69,40 +66,6 @@
   outline: none;
 }
 .image-card__button:focus-visible {
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow:
-    0 0 0 0.01rem rgba(255, 255, 255, 0.14),
-    0 0 0.5rem rgba(255, 255, 255, 0.10);
-}
-
-.pi-image-card__button {
-  border-radius: 0.5rem;
-  margin-top: 0.5rem;
-  margin-right: 0.5rem;
-  padding: 0.55rem 0.85rem;
-  font-size: 1.2rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.72);
-
-  cursor: pointer;
-  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
-}
-
-.pi-image-card__button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.22);
-
-  box-shadow:
-    0 0 0 0.01rem rgba(255, 255, 255, 0.08),
-    0 0 0.5rem rgba(255, 255, 255, 0.12);
-  transform: scale(1.01);
-}
-
-.pi-image-card__button:focus {
-  outline: none;
-}
-.pi-image-card__button:focus-visible {
   border-color: rgba(255, 255, 255, 0.28);
   box-shadow:
     0 0 0 0.01rem rgba(255, 255, 255, 0.14),
@@ -130,18 +93,12 @@
 }
 
 .image-card__placeholder {
-  min-height: 10rem;
+  min-height: 8rem;
   border-radius: 0.5rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
-
-  font-size: 1.2rem;
-  opacity: 0.72;
-
-  border: 1px dashed rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.02);
 }
 
 .image-card__input {
