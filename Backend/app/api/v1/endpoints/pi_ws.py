@@ -9,13 +9,14 @@ PI_KEY = os.environ.get("PI_KEY", "")
 async def pi_ws(
     websocket: WebSocket,
     device_id: str = Query(...),
-    es_pi_key: str = Query(...)
+    es_pi_key: str = Query(...),
+    device_secret: str = Query(...)
 ):
     if not PI_KEY or es_pi_key != PI_KEY:
         await websocket.close(code=1008)
         return
     
-    await pi_connection_manager.connect(device_id, websocket)
+    await pi_connection_manager.connect(device_id, websocket, device_secret)
 
     try:
         while True:

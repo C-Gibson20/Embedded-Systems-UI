@@ -7,6 +7,8 @@ import type { AnalysisResult } from "../lib/Types";
 import { ImageBackground } from "../components/ImageBackground";
 import { pollForResult } from "../lib/api/capture"
 import { getStoredPiImageUrl } from "../lib/api/piImage";
+import { loadDevices, saveDevices, type SavedDevice } from "../lib/devices/storage";
+import { DevicePicker } from "../components/DevicePicker";
 import "../styles/App.css";
 // import { VideoBackground } from "../components/VideoBackground";
 
@@ -23,6 +25,9 @@ export default function App() {
   const [piImageUrl, setPiImageUrl] = useState<string | null>(null);
   const displayImageUrl = imageUrl ?? piImageUrl;
 
+  const [devices, setDevices] = useState<SavedDevice[]>(() => loadDevices());
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(() => loadDevices()[0]?.deviceId ?? null);
+
   // Create/revoke object URL cleanly
   useEffect(() => {
     if (!file) {
@@ -33,6 +38,13 @@ export default function App() {
     setImageUrl(url);
     return () => URL.revokeObjectURL(url);
   }, [file]);
+
+  useEffect(() => {
+    saveDevices(devices);
+    if (!selectedDeviceId && devices[0]) setSelectedDeviceId(devices[0].deviceId);
+  }, [devices, selectedDeviceId]);
+
+  const selectedDevice = devices.find(d => d.deviceId === selectedDeviceId) ?? null;
 
   const canAnalyze = useMemo(() => !!file && !isBusy, [file, isBusy]);
 
@@ -60,14 +72,19 @@ export default function App() {
   async function runAnalysisCapture() {
     if (isBusy) return;
 
+    if (!selectedDevice) {
+      setError("No device selected");
+      return;
+    }
+
     setIsBusy(true);
     setError(null);
     setResult(null);
     setHasRunForCurrentImage(true);
 
     try {
-      const deviceId = "pi-01";
-      const r = await pollForResult(deviceId, { timeoutMs: 90000, pollMs: 1000 });
+      const { deviceId, pairingSecret } = selectedDevice;
+      const r = await pollForResult(deviceId, pairingSecret, { timeoutMs: 90000, pollMs: 1000 });
       setResult(r);
 
       setFile(null);
@@ -104,6 +121,20 @@ export default function App() {
               Intelligent plant recognition for automated care.
             </div>
           </header>
+
+          <div className="app__device-picker">
+            <DevicePicker
+              devices={devices}
+              selectedId={selectedDeviceId}
+              onSelect={(id) => setSelectedDeviceId(id)}
+              disabled={isBusy}
+              onAdd={(d) => setDevices((prev) => [...prev.filter(x => x.deviceId !== d.deviceId), d])}
+              onRemove={(id) => {
+                setDevices((prev) => prev.filter(d => d.deviceId !== id));
+                setSelectedDeviceId((cur) => (cur === id ? null : cur));
+              }}
+            />
+          </div>
 
           <div className="app__grid">
             <ImageInputCard

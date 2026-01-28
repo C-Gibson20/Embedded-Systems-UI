@@ -12,12 +12,15 @@ type ResultResponse = {
     error?: string;
 }
 
-export async function triggerCapture(deviceId: string): Promise<CaptureResponse> {
+export async function triggerCapture(deviceId: string, pairingSecret: string): Promise<CaptureResponse> {
     const res = await fetch(
         `${API_BASE}/api/v1/capture?device_id=${encodeURIComponent(deviceId)}`,
         {
             method: "POST",
-            headers: FRONTEND_KEY ? { "ES-Frontend-Key": FRONTEND_KEY } : undefined,
+            headers: {
+                ...(FRONTEND_KEY ? { "ES-Frontend-Key": FRONTEND_KEY } : {}),
+                "ES-Pairing-Secret": pairingSecret,
+            },
         }
     );
     
@@ -33,19 +36,22 @@ export async function fetchResult(deviceId: string): Promise<ResultResponse> {
 
 export async function pollForResult(
     deviceId: string,
+    pairingSecret: string,
     opts?: { timeoutMs?: number; pollMs?: number }
 ): Promise<AnalysisResult> {
     const timeoutMs = opts?.timeoutMs ?? 60000;
     const pollMs = opts?.pollMs ?? 1000;
 
-    await triggerCapture(deviceId);
+    await triggerCapture(deviceId, pairingSecret);
 
     const start = Date.now();
     while (Date.now() - start < timeoutMs) {
-        const res = await fetchResult(deviceId);
-        
-        if (res.status === "completed" && res.result) return res.result;
-        if (res.status === "error") throw new Error(res.error || "Pi job failed");
+        const res = await fetch(`${API_BASE}/api/v1/result/${encodeURIComponent(deviceId)}`);
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+
+        if (data.status === "completed" && data.result) return data.result;
+        if (data.status === "error") throw new Error(data.error || "Pi job failed");
 
         await new Promise((resolve) => setTimeout(resolve, pollMs));
     }
