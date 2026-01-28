@@ -1,0 +1,276 @@
+.device-picker {
+  border-radius: 0.75rem;
+  padding: 1.125rem;
+  margin-bottom:1rem;
+
+  background: rgba(8, 15, 12, 0.78);
+  backdrop-filter: blur(14px) saturate(120%);
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    0 1.25rem 3rem rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  transform: scale(1);
+  transform-origin: center;
+  transition:
+    transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 300ms ease,
+    border-color 300ms ease;
+}
+
+.device-picker:hover {
+  transform: scale(1.01);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 1.75rem 4rem rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.device-picker__title {
+  font-size: 1.8rem;
+  font-weight: 650; 
+  opacity: 0.82;
+}
+
+.device-picker__subtitle {
+  font-size: 1.2rem;
+  opacity: 0.72;
+}
+
+.add-device__button {
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.72);
+
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.add-device__button:hover:disabled {
+  background: rgba(255, 255, 255, 0.005);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.add-device__button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
+
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.08),
+    0 0 0.5rem rgba(255, 255, 255, 0.12);
+  transform: scale(1.01);
+}
+
+.add-device__button:focus {
+  outline: none;
+}
+.add-device__button:focus-visible {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.14),
+    0 0 0 0.5rem rgba(255, 255, 255, 0.10);
+}
+
+.remove-device__button {
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.72);
+
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.remove-device__button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
+
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.08),
+    0 0 0.5rem rgba(255, 255, 255, 0.12);
+  transform: scale(1.01);
+}
+
+.remove-device__button:focus {
+  outline: none;
+}
+.remove-device__button:focus-visible {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.14),
+    0 0 0 0.5rem rgba(255, 255, 255, 0.10);
+}
+
+.device-settings__button {
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.72);
+
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.device-settings__button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
+
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.08),
+    0 0 0.5rem rgba(255, 255, 255, 0.12);
+  transform: scale(1.01);
+}
+
+.device-settings__button:focus {
+  outline: none;
+}
+.device-settings__button:focus-visible {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.14),
+    0 0 0 0.5rem rgba(255, 255, 255, 0.10);
+}
+
+.device-picker__select {
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+
+  padding: 0.55rem 2.2rem 0.55rem 0.85rem; 
+  font-size: 1.2rem;
+
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.72);
+
+  cursor: pointer;
+}
+
+.device-picker__select:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
+
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.08),
+    0 0 0.5rem rgba(255, 255, 255, 0.12);
+  transform: scale(1.01);
+}
+
+.device-picker__select:focus {
+  outline: none;
+}
+
+.device-picker__select option {
+  background: rgba(8, 15, 12, 0.90);
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.device-modal__section-tabs {
+  display: flex;
+  gap: 1rem;
+}
+
+.device-modal__section {
+  background: none;
+  border: none;
+  padding: 6px 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  position: relative;
+  margin-bottom:0.5rem;
+}
+
+/* .device-modal__section:hover {
+  
+} */
+
+.device-modal__section--active::after {
+  font-size: 1.2rem;
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.01rem;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 1px;
+  margin-bottom:0.2rem;
+}
+
+.device-modal__section {
+  outline: none;
+}
+
+.device-modal__section:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+.device-modal__secondary {
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.72);
+
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.device-modal__secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
+
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.08),
+    0 0 0.5rem rgba(255, 255, 255, 0.12);
+  transform: scale(1.01);
+}
+
+.device-modal_secondary:focus {
+  outline: none;
+}
+.device-modal__secondary:focus-visible {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.14),
+    0 0 0 0.5rem rgba(255, 255, 255, 0.10);
+}
+
+.device-modal__input {
+    font-size: 1.2rem;
+}
+
+.device-modal__input:focus {
+  outline: none;
+}
+
+.device-modal__hint {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.52);
+}
+
+.device-modal__panel select.device-picker__select {
+  justify-self: start;
+  width: fit-content;
+  max-width: 100%;
+}
