@@ -54,7 +54,7 @@ export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysi
           <div>Select an image, then run analysis.</div>
         )}
 
-        {!isBusy && result && (
+        {result && (
           <div className="results-card__result">
             <div className="results-card__result-header">
               <div className="results-card__label">
