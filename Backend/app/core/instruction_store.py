@@ -72,4 +72,4 @@ class InstructionStore:
         
         return payload
     
-instructions = InstructionStore()
+instruction_store = InstructionStore()
