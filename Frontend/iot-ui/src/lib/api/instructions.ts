@@ -1,5 +1,5 @@
-import type { InstructionDispatchResponse, InstructionStatusResponse } from "../Types.ts";
-import { API_BASE, FRONTEND_KEY } from "../base.ts"; 
+import type { InstructionDispatchResponse, InstructionStatusResponse } from "../Types";
+import { API_BASE, FRONTEND_KEY } from "../base"; 
 
 async function getStatus(
     deviceId: string, 

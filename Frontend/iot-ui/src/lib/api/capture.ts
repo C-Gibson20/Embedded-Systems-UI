@@ -1,5 +1,5 @@
 import type { ResultResponse, CaptureResponse } from "../Types";
-import { API_BASE, FRONTEND_KEY } from "../base.ts"; 
+import { API_BASE, FRONTEND_KEY } from "../base"; 
 
 export async function triggerCapture(
     deviceId: string, 

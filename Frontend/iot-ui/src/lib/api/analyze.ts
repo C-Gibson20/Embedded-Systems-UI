@@ -1,5 +1,5 @@
 import type { AnalysisResult } from "../Types";
-import { API_BASE } from "../base.ts"; 
+import { API_BASE } from "../base"; 
 
 export async function analyzeImage(file: File): Promise<AnalysisResult> {
   const formData = new FormData();
