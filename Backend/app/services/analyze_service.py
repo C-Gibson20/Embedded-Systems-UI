@@ -14,7 +14,7 @@ name_label_map = {
     "echeveria_lilicana": "Echeveria Lilicana",
     "fittonia_albivenis": "Fittonia Albivenis",
     "corriandum_sativum": "Coriandrum Sativum",
-    "salvia_officinalis": "Salvia Officinalis",
+    "salvia_officinales": "Salvia Officinalis",
     "mentha_spicata": "Mentha Spicata",
 }
 
