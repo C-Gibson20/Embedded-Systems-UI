@@ -6,7 +6,7 @@ async function getStatus(
     pairingSecret: string,
     instructionId: string
 ): Promise<InstructionStatusResponse> {
-    const res = await fetch(`${API_BASE}/api/v1/instructions/status/${encodeURIComponent(deviceId)}/${encodeURIComponent(instructionId)}`, {
+    const res = await fetch(`${API_BASE}/api/v1/instructions/status/${encodeURIComponent(deviceId)}?instruction_id=${encodeURIComponent(instructionId)}`, {
         headers: {
             "ES-Frontend-Key": FRONTEND_KEY,
             "ES-Pairing-Secret": pairingSecret,
