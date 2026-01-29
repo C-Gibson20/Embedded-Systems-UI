@@ -11,12 +11,13 @@ type Props = {
   isApplyingInstructions: boolean;
   onInstructionsUpload: () => void;
   canAnalyze: boolean;
+  canUploadInstructions: boolean;
 
   hasUploaded: boolean;
   confirmation?: string | null;
 };
 
-export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysis, isApplyingInstructions, onInstructionsUpload, canAnalyze, hasUploaded }: Props) {
+export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysis, isApplyingInstructions, onInstructionsUpload, canAnalyze, canUploadInstructions, hasUploaded }: Props) {
   const uploadDisabled = isBusy || hasUploaded || isApplyingInstructions;
 
   return (
@@ -54,7 +55,7 @@ export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysi
           <div>Select an image, then run analysis.</div>
         )}
 
-        {!isBusy &&result && (
+        {!isBusy && result && (
           <div className="results-card__result">
             <div className="results-card__result-header">
               <div className="results-card__label">
@@ -71,18 +72,20 @@ export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysi
               ))}
             </ul>
 
-            <button
-              className="results-card__button"
-              onClick={onInstructionsUpload}
-              disabled={uploadDisabled}
-              type="button"
-            >
-              {hasUploaded
-                ? "Care Routine Updated"
-                : isApplyingInstructions
-                ? "Updating Care Instructions…"
-                : "Update Care Instructions"}
-            </button>
+            {canUploadInstructions && (
+              <button
+                className="results-card__button"
+                onClick={onInstructionsUpload}
+                disabled={uploadDisabled}
+                type="button"
+              >
+                {hasUploaded
+                  ? "Care Routine Updated"
+                  : isApplyingInstructions
+                  ? "Updating Care Instructions…"
+                  : "Update Care Instructions"}
+              </button>
+          )}
           </div>
         )}
       </div>

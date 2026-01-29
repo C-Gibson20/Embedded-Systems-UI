@@ -193,6 +193,7 @@ export default function App() {
               onRunAnalysis={runAnalysis}
               onInstructionsUpload={uploadInstructions}
               canAnalyze={canAnalyze}
+              canUploadInstructions={!!selectedDevice && !!activeJobId}
               hasUploaded={hasUploaded}
               isApplyingInstructions={isApplyingInstructions}
             />
