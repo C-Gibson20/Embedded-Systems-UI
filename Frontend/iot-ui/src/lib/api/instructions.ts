@@ -33,7 +33,7 @@ export async function sendInstructions(
             "ES-Pairing-Secret": pairingSecret,
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ jobId, notes }),
+        body: JSON.stringify({ job_id: jobId, notes }),
     });
 
     if (!dispatch.ok) throw new Error(await dispatch.text());
