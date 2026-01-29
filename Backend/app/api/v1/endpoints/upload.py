@@ -22,7 +22,7 @@ async def upload_file(
     if not job:
         raise HTTPException(status_code=404, detail="No active job for this device.")
     
-    if job.job_id != job_id:
+    if not jobs.is_latest_job(device_id, job_id):
         return {"ok": False, "detail": "Job Superseded"}
     
     if not (file.content_type or "").startswith("image/"):
@@ -32,7 +32,7 @@ async def upload_file(
         return {"ok": False, "detail": "Job Superseded"}
 
     image_bytes = await file.read()
-    image_store.set_image(device_id, file.content_type, image_bytes)
+    image_store.set_image(job_id, file.content_type, image_bytes)
     try:
         result = await run_in_threadpool(analyze_image, image_bytes)
         jobs.set_result(device_id, job_id, result)

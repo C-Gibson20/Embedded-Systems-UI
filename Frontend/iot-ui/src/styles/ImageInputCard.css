@@ -73,6 +73,10 @@
 }
 
 .image-card__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   border-radius: 0.5rem;
   padding: 1rem;
 
@@ -83,12 +87,10 @@
 }
 
 .image-card__image {
-  width: 100%;
   max-height: 16rem;
   border-radius: 0.5rem;
   object-fit: contain;
-
-  background: rgba(0, 0, 0, 0.18);
+  max-width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 

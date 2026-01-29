@@ -12,14 +12,14 @@ class ImageStore:
     def __init__(self):
         self._images = {}
 
-    def set_image(self, device_id, content_type, data):
-        self._images[device_id] = ImageData(
+    def set_image(self, job_id, content_type, data):
+        self._images[job_id] = ImageData(
             content_type=content_type,
             data=data,
             updated_at=time.time()
         )
 
-    def get_image(self, device_id):
-        return self._images.get(device_id)
+    def get_image(self, job_id):
+        return self._images.get(job_id)
     
 image_store = ImageStore()

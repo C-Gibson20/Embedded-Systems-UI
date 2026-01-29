@@ -21,16 +21,18 @@ class PiEmulator:
         self.device_secret = device_secret
         self.image_path = image_path
         self._stop = False
+        self.ws = None
 
         ws_base = to_ws_url(self.base_url)
         self.ws_url = f"{ws_base}/api/v1/ws/pi?device_id={self.device_id}&es_pi_key={self.pi_key}&device_secret={self.device_secret}"
+        print(f"[WS] WebSocket URL: {self.ws_url}")
 
     def upload_image(self, job_id):
         url = f"{self.base_url}/api/v1/pi/upload/{job_id}?device_id={self.device_id}"
         headers = {"ES-Pi-Key": self.pi_key}
 
         with open(self.image_path, "rb") as f:
-            files = {"file": (os.path.basename(self.image_path), f, "image/jpeg")}
+            files = {"file": (os.path.basename(self.image_path), f, "image/png")}
             r = requests.post(url, headers=headers, files=files, timeout=120)
 
         if not r.ok:
@@ -46,10 +48,10 @@ class PiEmulator:
 
         signal.signal(signal.SIGINT, handle_sigint)
 
-        def on_open():
+        def on_open(ws):
             print(f"[WS] Connected: {self.ws_url}")
 
-        def on_message(message):
+        def on_message(ws, message):
             try:
                 data = json.loads(message)
             except Exception:
@@ -66,10 +68,30 @@ class PiEmulator:
                 except Exception as e:
                     print(f"[ERR] {e}")
 
-        def on_error(error):
+            elif data.get("type") == "apply instructions":
+                instruction_id = data.get("instruction_id")
+                job_id = data.get("job_id")
+                notes = data.get("notes", [])
+                print(f"[WS] Care instructions received for job_id={job_id}.")
+                
+                try:
+                    time.sleep(1)
+                    ack = {
+                        "type": "instructions applied", 
+                        "instruction_id": instruction_id,
+                        "job_id": job_id, 
+                        "ok": True,
+                        "message": "Instructions applied successfully."
+                    }
+                    ws.send(json.dumps(ack))
+                    print(f"[WS] Acknowledged instructions for job_id={job_id}.")
+                except Exception as e:
+                    print(f"[ERR] {e}")
+
+        def on_error(ws,error):
             print(f"[WS] Error: {error}")
 
-        def on_close(code, msg):
+        def on_close(ws, code, msg):
             print(f"[WS] Closed: code={code} msg={msg}")
 
         while not self._stop:

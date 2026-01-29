@@ -7,6 +7,7 @@ import time
 @dataclass
 class Job:
     job_id: str
+    device_id: str
     status: str # "capturing" | "processing" | "completed" | "error"
     created_at: float
     result: Optional[Dict[str, Any]] = None
@@ -19,6 +20,7 @@ class JobStore:
     def create_job(self, device_id):
         job = Job(
             job_id=uuid.uuid4().hex,
+            device_id=device_id,
             status="capturing",
             created_at=time.time()
         )
@@ -27,6 +29,10 @@ class JobStore:
     
     def get_job(self, device_id):
         return self._jobs.get(device_id)
+    
+    def is_latest_job(self, device_id, job_id):
+        job = self.get_job(device_id)
+        return bool(job and job.job_id == job_id)
     
     def mark_processing(self, device_id, job_id):
         job = self.get_job(device_id)
@@ -51,5 +57,23 @@ class JobStore:
         job.status = "error"
         job.error = error_message
         return True
+    
+    def get_job_payload(self, device_id):
+        job = self.get_job(device_id)
+        if not job:
+            return None
+        
+        payload = {
+            "device_id": device_id,
+            "job_id": job.job_id,
+            "status": job.status
+        }
+        
+        if job.status == "completed":
+            payload["result"] = job.result
+        elif job.status == "error":
+            payload["error"] = job.error
+        
+        return payload
     
 jobs = JobStore()

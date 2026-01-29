@@ -8,16 +8,23 @@ type Props = {
 
   showRunButton: boolean;
   onRunAnalysis: () => void;
+  isApplyingInstructions: boolean;
+  onInstructionsUpload: () => void;
   canAnalyze: boolean;
+
+  hasUploaded: boolean;
+  confirmation?: string | null;
 };
 
-export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysis, canAnalyze }: Props) {
+export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysis, isApplyingInstructions, onInstructionsUpload, canAnalyze, hasUploaded }: Props) {
+  const uploadDisabled = isBusy || hasUploaded || isApplyingInstructions;
+
   return (
     <div className="results-card">
       <div className="results-card__header">
         <div className="results-card__title">Result</div>
         <div className="results-card__subtitle">
-          Processing output will appear here.
+          Process image for identification and care automation.
         </div>
 
         {showRunButton && (
@@ -63,6 +70,19 @@ export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysi
                 <li key={i}>{n}</li>
               ))}
             </ul>
+
+            <button
+              className="results-card__button"
+              onClick={onInstructionsUpload}
+              disabled={uploadDisabled}
+              type="button"
+            >
+              {hasUploaded
+                ? "Care Routine Updated"
+                : isApplyingInstructions
+                ? "Updating Care Instructions…"
+                : "Update Care Instructions"}
+            </button>
           </div>
         )}
       </div>

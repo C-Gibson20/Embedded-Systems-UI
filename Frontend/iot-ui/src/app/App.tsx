@@ -8,6 +8,7 @@ import type { AnalysisResult } from "../lib/Types";
 import { pollForResult } from "../lib/api/capture"
 import { getStoredPiImageUrl } from "../lib/api/piImage";
 import { loadDevices, saveDevices, type SavedDevice } from "../lib/devices/storage";
+import { sendInstructions } from "../lib/api/instructions";
 import "../styles/App.css";
 
 export default function App() {
@@ -23,7 +24,13 @@ export default function App() {
   const displayImageUrl = imageUrl ?? piImageUrl;
 
   const [devices, setDevices] = useState<SavedDevice[]>(() => loadDevices());
-  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(() => loadDevices()[0]?.deviceId ?? null);
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(
+    () => loadDevices()[0]?.deviceId ?? null
+  );
+
+  const [isApplyingInstructions, setIsApplyingInstructions] = useState(false);
+  const [activeJobId, setActiveJobId] = useState<string | null>(null);
+  const [hasUploaded, setHasUploaded] = useState(false);
 
   useEffect(() => {
     if (!file) {
@@ -49,8 +56,6 @@ export default function App() {
   async function runAnalysis() {
     if (!file || isBusy) return;
 
-    setHasRunForCurrentImage(true);
-
     setIsBusy(true);
     setError(null);
     setResult(null);
@@ -58,6 +63,7 @@ export default function App() {
     try {
       const r = await analyzeImage(file);
       setResult(r);
+      setHasRunForCurrentImage(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
       setHasRunForCurrentImage(false);
@@ -77,19 +83,50 @@ export default function App() {
     setIsBusy(true);
     setError(null);
     setResult(null);
-    setHasRunForCurrentImage(true);
 
     try {
       const { deviceId, pairingSecret } = selectedDevice;
-      const r = await pollForResult(deviceId, pairingSecret, { timeoutMs: 90000, pollMs: 1000 });
-      setResult(r);
+      const completed = await pollForResult(deviceId, pairingSecret, { timeoutMs: 90000, pollMs: 1000 });
+
+      setActiveJobId(completed.job_id);
+      setResult(completed.result);
       setFile(null);
-      setPiImageUrl(getStoredPiImageUrl(deviceId));
+      setPiImageUrl(getStoredPiImageUrl(completed.job_id));
+      setHasRunForCurrentImage(true);
+      setHasUploaded(false);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
       setHasRunForCurrentImage(false);
     } finally {
-      setIsBusy(false);
+      setIsBusy(false); 
+    }
+  }
+
+  async function uploadInstructions() {
+    if (!result || isApplyingInstructions || isBusy) return;
+
+    if (!selectedDevice) {
+      setError("No device selected");
+      return;
+    }
+
+    if (!activeJobId) {
+      setError("No active jobs available for instructions upload");
+      return;
+    }
+    
+    setIsApplyingInstructions(true);
+    setError(null);
+
+    try {
+      const { deviceId, pairingSecret } = selectedDevice;
+      await sendInstructions(deviceId, pairingSecret, activeJobId, result.notes);
+      setHasUploaded(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+      setHasUploaded(false);
+    } finally {
+      setIsApplyingInstructions(false);
     }
   }
 
@@ -98,7 +135,10 @@ export default function App() {
     setPiImageUrl(null);
     setResult(null);
     setError(null);
+    setActiveJobId(null);
     setHasRunForCurrentImage(false);
+    setHasUploaded(false);
+    setIsApplyingInstructions(false);
   }
 
   return (
@@ -136,6 +176,10 @@ export default function App() {
                 setFile(f);
                 setResult(null);
                 setError(null);
+                setActiveJobId(null);
+                setIsApplyingInstructions(false);
+                setHasRunForCurrentImage(false);
+                setHasUploaded(false);
               }}
               onTakePhoto={runAnalysisCapture}
               onClear={clearAll}
@@ -147,7 +191,10 @@ export default function App() {
               error={error} 
               showRunButton={showRunButton}
               onRunAnalysis={runAnalysis}
+              onInstructionsUpload={uploadInstructions}
               canAnalyze={canAnalyze}
+              hasUploaded={hasUploaded}
+              isApplyingInstructions={isApplyingInstructions}
             />
           </div>
         </div>
