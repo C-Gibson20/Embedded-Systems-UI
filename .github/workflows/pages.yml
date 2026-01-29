@@ -35,6 +35,10 @@ jobs:
 
       - name: Build
         working-directory: Frontend/iot-ui
+        env:
+          VITE_API_BASE: ${{ secrets.VITE_API_BASE }}
+          VITE_FRONTEND_KEY: ${{ secrets.VITE_FRONTEND_KEY }}
+          VITE_STORAGE_KEY: ${{ secrets.VITE_STORAGE_KEY }}
         run: npm run build
 
       - name: Upload Pages artifact
