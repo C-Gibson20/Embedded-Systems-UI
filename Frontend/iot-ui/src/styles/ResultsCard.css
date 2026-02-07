@@ -131,3 +131,22 @@
 
   cursor: pointer;
 }
+
+results-card__select:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
+
+  box-shadow:
+    0 0 0 0.01rem rgba(255, 255, 255, 0.08),
+    0 0 0.5rem rgba(255, 255, 255, 0.12);
+  transform: scale(1.01);
+}
+
+.results-card__select:focus {
+  outline: none;
+}
+
+.results-card__select option {
+  background: rgba(8, 15, 12, 0.90);
+  color: rgba(255, 255, 255, 0.28);
+}
