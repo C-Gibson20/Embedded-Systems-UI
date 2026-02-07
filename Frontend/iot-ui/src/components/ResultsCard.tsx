@@ -1,4 +1,4 @@
-import type { AnalysisResult } from "../lib/Types";
+import type { AnalysisResult, Maturation } from "../lib/Types";
 import "../styles/ResultsCard.css";
 
 type Props = {
@@ -13,11 +13,27 @@ type Props = {
   canAnalyze: boolean;
   canUploadInstructions: boolean;
 
+  maturation: Maturation;
+  onMaturationChange: (m: Maturation) => void;
+
   hasUploaded: boolean;
   confirmation?: string | null;
 };
 
-export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysis, isApplyingInstructions, onInstructionsUpload, canAnalyze, canUploadInstructions, hasUploaded }: Props) {
+export function ResultsCard({ 
+  result, 
+  isBusy, 
+  error, 
+  showRunButton, 
+  onRunAnalysis, 
+  isApplyingInstructions, 
+  onInstructionsUpload, 
+  canAnalyze, 
+  maturation, 
+  onMaturationChange,
+  canUploadInstructions, 
+  hasUploaded 
+}: Props) {
   const uploadDisabled = isBusy || hasUploaded || isApplyingInstructions;
 
   return (
@@ -71,6 +87,20 @@ export function ResultsCard({ result, isBusy, error, showRunButton, onRunAnalysi
                 <li key={i}>{n}</li>
               ))}
             </ul>
+
+            <label className="results-card__field">
+              <div className="results-card__field-label">Maturation</div>
+              <select
+                className="results-card__select"
+                value={maturation}
+                onChange={(e) => onMaturationChange(e.target.value as Maturation)}
+              >
+                <option value="Seedling">Seedling</option>
+                <option value="Mature">Mature</option>
+                <option value="Flowering">Flowering</option>
+                <option value="Fruiting">Fruiting</option>
+              </select>
+            </label>
 
             {canUploadInstructions && (
               <button

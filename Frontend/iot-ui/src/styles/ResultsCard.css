@@ -119,3 +119,15 @@
     0 0 0 0.01rem rgba(255, 255, 255, 0.14),
     0 0 0.5rem rgba(255, 255, 255, 0.10);
 }
+
+.results-card__select {
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.55rem 2.2rem 0.55rem 0.85rem; 
+
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  cursor: pointer;
+}

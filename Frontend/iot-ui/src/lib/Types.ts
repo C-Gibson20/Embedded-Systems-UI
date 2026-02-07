@@ -25,3 +25,5 @@ export type InstructionStatusResponse =
   | { device_id: string; instruction_id: string; job_id: string; status: "dispatching" }
   | { device_id: string; instruction_id: string; job_id: string; status: "applied"; message: string }
   | { device_id: string; instruction_id: string; job_id: string; status: "error"; error: string };
+
+export type Maturation = "Seedling" | "Mature" | "Flowering" | "Fruiting";

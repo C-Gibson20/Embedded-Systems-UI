@@ -4,7 +4,7 @@ import { ResultsCard } from "../components/ResultsCard";
 import { ImageBackground } from "../components/ImageBackground";
 import { DeviceCard } from "../components/DeviceCard";
 import { analyzeImage } from "../lib/api/analyze";  
-import type { AnalysisResult } from "../lib/Types";
+import type { AnalysisResult, Maturation } from "../lib/Types";
 import { pollForResult } from "../lib/api/capture"
 import { getStoredPiImageUrl } from "../lib/api/piImage";
 import { loadDevices, saveDevices, type SavedDevice } from "../lib/devices/storage";
@@ -31,6 +31,8 @@ export default function App() {
   const [isApplyingInstructions, setIsApplyingInstructions] = useState(false);
   const [activeJobId, setActiveJobId] = useState<string | null>(null);
   const [hasUploaded, setHasUploaded] = useState(false);
+
+  const [maturation, setMaturation] = useState<Maturation>("Mature");
 
   useEffect(() => {
     if (!file) {
@@ -118,9 +120,14 @@ export default function App() {
     setIsApplyingInstructions(true);
     setError(null);
 
+    const notesWithMaturation = [
+      ...result.notes,
+      `Maturation stage: ${maturation}`,
+    ];
+
     try {
       const { deviceId, pairingSecret } = selectedDevice;
-      await sendInstructions(deviceId, pairingSecret, activeJobId, result.notes);
+      await sendInstructions(deviceId, pairingSecret, activeJobId, notesWithMaturation);
       setHasUploaded(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
@@ -137,6 +144,7 @@ export default function App() {
     setError(null);
     setActiveJobId(null);
     setHasRunForCurrentImage(false);
+    setMaturation("Mature");
     setHasUploaded(false);
     setIsApplyingInstructions(false);
   }
@@ -148,7 +156,7 @@ export default function App() {
       <div className="app__content">
         <div className="app__container">
           <header className="app__header">
-            <div className="app__title">PlantIO</div>
+            <div className="app__title">HANA 花</div>
             <div className="app__subtitle">
               Intelligent plant recognition for automated care.
             </div>
@@ -193,6 +201,8 @@ export default function App() {
               onRunAnalysis={runAnalysis}
               onInstructionsUpload={uploadInstructions}
               canAnalyze={canAnalyze}
+              maturation={maturation}
+              onMaturationChange={setMaturation}
               canUploadInstructions={!!selectedDevice && !!activeJobId}
               hasUploaded={hasUploaded}
               isApplyingInstructions={isApplyingInstructions}
