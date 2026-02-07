@@ -158,7 +158,7 @@ export default function App() {
           <header className="app__header">
             <div className="app__title">HANA 花</div>
             <div className="app__subtitle">
-              Intelligent plant recognition for automated care.
+              Intelligent Plant Care, Powered by AI.
             </div>
           </header>
 
