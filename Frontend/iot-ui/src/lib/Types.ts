@@ -27,3 +27,21 @@ export type InstructionStatusResponse =
   | { device_id: string; instruction_id: string; job_id: string; status: "error"; error: string };
 
 export type Maturation = "Seedling" | "Mature" | "Flowering" | "Fruiting";
+
+export type SensorValue = 
+  | { status: "ok"; value: number; updatedAt: number }
+  | { status: "error"; }
+  | { status: "loading" };
+
+export type SensorsResponse = {
+  device_id: string;
+  water: SensorValue;
+  light: SensorValue;
+};
+
+export type DeviceStatusResponse = {
+  device_id: string;
+  paired: boolean;
+};
+
+export type DeviceStatus = "paired" | "unpaired" | "unknown";

@@ -1,10 +1,12 @@
 import os
 import json
+import random
 import time
 import requests
 import websocket 
 import signal 
 import sys
+import threading
 
 def to_ws_url(http_base):
     if http_base.startswith("https://"):
@@ -40,6 +42,38 @@ class PiEmulator:
 
         print(f"[OK] Uploaded image for job_id={job_id}")
 
+    def _make_sensor_payload(self):
+        def maybe_error(label):
+            if random.random() < 0.1:
+                return {"status": "error", "message": f"{label} sensor failure"}
+            return None
+        
+        water_err = maybe_error("Water")
+        light_err = maybe_error("Light")
+
+        water = water_err or {"status": "ok", "value": random.uniform(0, 100)}
+        light = light_err or {"status": "ok", "value": random.uniform(0, 100)}
+
+        return {
+            "type": "sensor_update",
+            "water": water,
+            "light": light
+        }
+    
+    def _sensor_loop(self, ws):
+        print(f"[SENSORS] Sensor loop started (every {self.sensor_interval_sec}s)")
+        while not self._sensor_thread_stop.is_set():
+            try:
+                payload = self._make_sensor_payload()
+                ws.send(json.dumps(payload))
+                print(f"[SENSORS] Sent: {payload}")
+            except Exception as e:
+                print(f"[SENSORS] Send error: {e}")
+                return
+            self._sensor_thread_stop.wait(self.sensor_interval_sec)
+
+        print("[SENSORS] Sensor loop stopped")
+
     def run_forever(self):
         def handle_sigint(signum, frame):
             print("\n[WS] SIGINT received, shutting down...")
@@ -50,6 +84,10 @@ class PiEmulator:
 
         def on_open(ws):
             print(f"[WS] Connected: {self.ws_url}")
+
+            self._sensor_thread_stop.clear()
+            self._sensor_thread = threading.Thread(target=self._sensor_loop, args=(ws,), daemon=True)
+            self._sensor_thread.start()
 
         def on_message(ws, message):
             try:
@@ -94,6 +132,8 @@ class PiEmulator:
         def on_close(ws, code, msg):
             print(f"[WS] Closed: code={code} msg={msg}")
 
+            self._sensor_thread_stop.set()
+
         while not self._stop:
             self.ws = websocket.WebSocketApp(
                 self.ws_url,
@@ -106,6 +146,7 @@ class PiEmulator:
 
     def stop(self):
         self._stop = True
+        self._sensor_thread_stop.set()
         if self.ws:
             self.ws.close()
 

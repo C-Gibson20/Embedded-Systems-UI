@@ -39,7 +39,7 @@ export function ResultsCard({
   return (
     <div className="results-card">
       <div className="results-card__header">
-        <div className="results-card__title">Result</div>
+        <div className="results-card__title">Identification</div>
         <div className="results-card__subtitle">
           Process image for identification and care automation.
         </div>
@@ -68,7 +68,7 @@ export function ResultsCard({
         )}
 
         {!isBusy && !error && !result && (
-          <div>Select an image, then run analysis.</div>
+          <div>Capture an image, then run analysis.</div>
         )}
 
         {!isBusy && result && (

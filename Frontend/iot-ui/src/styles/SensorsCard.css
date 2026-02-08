@@ -1,0 +1,44 @@
+.sensor-card {
+  display: grid;
+  gap: 0.75rem;
+  border-radius: 0.5rem;
+  padding: 1.125rem;
+  margin-top:1rem;
+
+  background: rgba(8, 15, 12, 0.78);
+  backdrop-filter: blur(14px) saturate(120%);
+
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.65);
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    0 1.25rem 3rem rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  transform: scale(1);
+  transform-origin: center;
+  transition:
+    transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 300ms ease,
+    border-color 300ms ease;
+}
+
+.sensor-card:hover {
+  transform: scale(1.01);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 1.75rem 4rem rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.sensor-card__title {
+  font-size: 1.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 650; 
+}
+
+.sensor-card__updated {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.45);
+}

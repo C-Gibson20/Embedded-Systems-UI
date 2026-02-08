@@ -43,14 +43,3 @@ body {
   font-size: 1.2rem;
   opacity: 0.82;
 }
-
-.app__grid {
-  display: grid;
-  gap: 1rem;
-}
-
-@media (min-width: 1024px) {
-  .app__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}

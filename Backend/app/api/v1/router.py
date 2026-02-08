@@ -1,5 +1,8 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import health, analyze, upload, capture, result, stored_image, pi_ws, instructions, instruction_status
+from app.api.v1.endpoints import (
+    health, analyze, upload, capture, result, stored_image, pi_ws, instructions, 
+    instruction_status, device_status, sensors
+)
 
 router = APIRouter()
 
@@ -13,3 +16,5 @@ router.include_router(pi_ws.router, tags=["pi-ws"])
 router.include_router(stored_image.router, tags=["pi-image"])
 router.include_router(instructions.router, tags=["instructions"])
 router.include_router(instruction_status.router, tags=["instruction-status"])
+router.include_router(device_status.router, tags=["device-status"])
+router.include_router(sensors.router, tags=["sensors"])

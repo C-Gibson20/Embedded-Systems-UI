@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
-import { ImageInputCard } from "../components/ImageInputCard";
-import { ResultsCard } from "../components/ResultsCard";
 import { ImageBackground } from "../components/ImageBackground";
 import { DeviceCard } from "../components/DeviceCard";
+import {PlantPanel} from "../components/PlantPanel";
 import { analyzeImage } from "../lib/api/analyze";  
-import type { AnalysisResult, Maturation } from "../lib/Types";
+import type { AnalysisResult, Maturation, DeviceStatus, SensorsResponse } from "../lib/Types";
 import { pollForResult } from "../lib/api/capture"
 import { getStoredPiImageUrl } from "../lib/api/piImage";
 import { loadDevices, saveDevices, type SavedDevice } from "../lib/devices/storage";
 import { sendInstructions } from "../lib/api/instructions";
+import { SensorsCard } from "../components/SensorsCard";
+import { fetchDeviceStatus } from "../lib/api/deviceStatus";
+import { fetchPlantName } from "../lib/api/plantName";
+import { fetchSensors } from "../lib/api/sensors";
 import "../styles/App.css";
 
 export default function App() {
@@ -18,6 +21,7 @@ export default function App() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [hasRunForCurrentImage, setHasRunForCurrentImage] = useState(false);
+  const canAnalyze = useMemo(() => !!file && !isBusy, [file, isBusy]);
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [piImageUrl, setPiImageUrl] = useState<string | null>(null);
@@ -27,13 +31,18 @@ export default function App() {
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(
     () => loadDevices()[0]?.deviceId ?? null
   );
+  const selectedDevice = devices.find(d => d.deviceId === selectedDeviceId) ?? null;
+  const [deviceStatus, setDeviceStatus] = useState<DeviceStatus>("unknown");
 
   const [isApplyingInstructions, setIsApplyingInstructions] = useState(false);
   const [activeJobId, setActiveJobId] = useState<string | null>(null);
   const [hasUploaded, setHasUploaded] = useState(false);
-
+  const showRunButton = !!file && !hasRunForCurrentImage;
+  
   const [maturation, setMaturation] = useState<Maturation>("Mature");
-
+  const [currentPlantName, setCurrentPlantName] = useState<string | null>(null);
+  const [sensors, setSensors] = useState<SensorsResponse | null>(null);
+  
   useEffect(() => {
     if (!file) {
       setImageUrl(null);
@@ -49,11 +58,56 @@ export default function App() {
     if (!selectedDeviceId && devices[0]) setSelectedDeviceId(devices[0].deviceId);
   }, [devices, selectedDeviceId]);
 
-  const selectedDevice = devices.find(d => d.deviceId === selectedDeviceId) ?? null;
+  useEffect(() => {
+    let cancelled = false;
+    let timer: number | undefined;
 
-  const canAnalyze = useMemo(() => !!file && !isBusy, [file, isBusy]);
+    async function refresh() {
+      if (!selectedDevice) {
+        setDeviceStatus("unknown");
+        return;
+      }
+      try {
+        const s = await fetchDeviceStatus(selectedDevice.deviceId, selectedDevice.pairingSecret);
+        if (cancelled) return;
+        setDeviceStatus(s.paired ? "paired" : "unpaired");
+      } catch {
+        if (cancelled) return;
+        setDeviceStatus("unpaired");
+      }
+    }
 
-  const showRunButton = !!file && !hasRunForCurrentImage;
+    refresh();
+    if (selectedDevice) timer = window.setInterval(refresh, 30000);
+
+    return () => {
+      cancelled = true;
+      if (timer) window.clearInterval(timer);
+    };
+  }, [selectedDevice?.deviceId, selectedDevice?.pairingSecret]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadCurrentPlantName() {
+      if (!selectedDevice) {
+        setCurrentPlantName(null);
+        return;
+      }
+
+      try {
+        const name = await fetchPlantName(selectedDevice.deviceId);
+        if (!cancelled) setCurrentPlantName(name);
+      } catch {
+        if (!cancelled) setCurrentPlantName(null);
+      }
+    }
+
+    loadCurrentPlantName();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedDevice?.deviceId]);
 
   async function runAnalysis() {
     if (!file || isBusy) return;
@@ -96,6 +150,7 @@ export default function App() {
       setPiImageUrl(getStoredPiImageUrl(completed.job_id));
       setHasRunForCurrentImage(true);
       setHasUploaded(false);
+      setCurrentPlantName(completed.result.label);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
       setHasRunForCurrentImage(false);
@@ -137,6 +192,34 @@ export default function App() {
     }
   }
 
+  useEffect(() => {
+    let cancelled = false;
+    let timer: number | undefined;
+
+    setSensors(null);
+
+    async function refresh() {
+      if (!selectedDevice) {
+        setSensors(null);
+        return;
+      }
+      try {
+        const s = await fetchSensors(selectedDevice.deviceId, selectedDevice.pairingSecret);
+        if (!cancelled && s.device_id === selectedDevice.deviceId) setSensors(s);
+      } catch {
+        if (!cancelled) setSensors(null);
+      }
+    }
+
+    refresh();
+    if (selectedDevice) timer = window.setInterval(refresh, 60000);
+
+    return () => {
+      cancelled = true;
+      if (timer) window.clearInterval(timer);
+    };
+  }, [selectedDevice?.deviceId, selectedDevice?.pairingSecret]);
+
   function clearAll() {
     setFile(null);
     setPiImageUrl(null);
@@ -173,12 +256,29 @@ export default function App() {
                 setDevices((prev) => prev.filter(d => d.deviceId !== id));
                 setSelectedDeviceId((cur) => (cur === id ? null : cur));
               }}
+              deviceStatus={deviceStatus}
             />
           </div>
 
           <div className="app__grid">
-            <ImageInputCard
+            <PlantPanel
+              selectedDeviceId={selectedDeviceId}
+              deviceStatus={deviceStatus}
+              currentPlantName={currentPlantName}
+
               imageUrl={displayImageUrl}
+              result={result}
+              error={error}
+              isBusy={isBusy}
+              showRunButton={showRunButton}
+              canAnalyze={canAnalyze}
+
+              maturation={maturation}
+              onMaturationChange={setMaturation}
+              canUploadInstructions={!!selectedDevice && !!activeJobId}
+              hasUploaded={hasUploaded}
+              isApplyingInstructions={isApplyingInstructions}
+
               onPickFile={(f) => {
                 setPiImageUrl(null);
                 setFile(f);
@@ -191,22 +291,17 @@ export default function App() {
               }}
               onTakePhoto={runAnalysisCapture}
               onClear={clearAll}
-              isBusy={isBusy}
-            />
-            <ResultsCard 
-              result={result} 
-              isBusy={isBusy} 
-              error={error} 
-              showRunButton={showRunButton}
               onRunAnalysis={runAnalysis}
-              onInstructionsUpload={uploadInstructions}
-              canAnalyze={canAnalyze}
-              maturation={maturation}
-              onMaturationChange={setMaturation}
-              canUploadInstructions={!!selectedDevice && !!activeJobId}
-              hasUploaded={hasUploaded}
-              isApplyingInstructions={isApplyingInstructions}
+              onUploadInstructions={uploadInstructions}
+
+              collapseKey={selectedDeviceId}
             />
+
+          </div>
+          <div className="app__sensor-data">
+              <SensorsCard 
+                sensors={sensors}
+              />  
           </div>
         </div>
       </div>

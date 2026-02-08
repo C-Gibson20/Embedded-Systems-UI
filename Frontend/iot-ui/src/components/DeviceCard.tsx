@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { SavedDevice } from "../lib/devices/storage";
+import type { DeviceStatus } from "../lib/Types";
 import "../styles/DeviceCard.css";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
   onAdd: (d: SavedDevice) => void;
   onRemove: (deviceId: string) => void;
   disabled?: boolean;
+  deviceStatus: DeviceStatus;
 };
 
 export function DeviceCard({
@@ -18,15 +20,23 @@ export function DeviceCard({
   onAdd,
   onRemove,
   disabled,
+  deviceStatus,
 }: Props) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [settingsTab, setSettingsTab] = useState<"add" | "remove">("add");
+  const [settingsTab, setSettingsTab] = useState<"select" | "add" | "remove">(
+    "select"
+  );
 
   const [name, setName] = useState("");
   const [deviceId, setDeviceId] = useState("");
   const [pairingSecret, setPairingSecret] = useState("");
 
   const [removeId, setRemoveId] = useState<string>("");
+
+  const selectedDevice = useMemo(
+    () => devices.find((d) => d.deviceId === selectedId) ?? null,
+    [devices, selectedId]
+  );
 
   const canAdd = useMemo(
     () => !!name.trim() && !!deviceId.trim() && !!pairingSecret.trim(),
@@ -40,53 +50,69 @@ export function DeviceCard({
 
   function closeSettings() {
     setIsSettingsOpen(false);
-    setSettingsTab("add");
+    setSettingsTab("select");
     setRemoveId("");
   }
 
   return (
     <div className="device-card">
-      <div>
-        <div className="device-card__title">Device</div>
-        <div>Select a PlantIO device from the list, or manage devices in settings.</div>
-      </div>
+      <div className="device-card__top">
+        <div>
+          <div className="device-card__title">HANA Device</div>
 
-      <div className="device-card__controls">
-        <select
-          className="device-card__select"
-          disabled={disabled || devices.length === 0}
-          value={selectedId ?? ""}
-          onChange={(e) => onSelect(e.target.value)}
-        >
-          <option value="" disabled>
-            Select device…
-          </option>
-          {devices.map((d) => (
-            <option key={d.deviceId} value={d.deviceId}>
-              {d.name} ({d.deviceId})
-            </option>
-          ))}
-        </select>
+          {selectedDevice ? (
+            <div className="device-card__current">
+              <div className="device-card__current-name">
+                Name: {selectedDevice.name}
+              </div>
+              <div className="device-card__current-id">
+                Device ID: {selectedDevice.deviceId}
+              </div>
+              <div className={`device-status device-status--${deviceStatus}`}>
+                {deviceStatus === "paired" && "Paired"}
+                {deviceStatus === "unpaired" && "Not Paired"}
+                {deviceStatus === "unknown" && "Status Unknown"}
+              </div>
+
+            </div>
+          ) : (
+            <div className="device-card__hint">
+              No device selected. Choose one in Manage Device.
+            </div>
+          )}
+        </div>
 
         <button
           type="button"
           disabled={disabled}
           className="device-card__button"
-          onClick={() => setIsSettingsOpen(true)}
+          onClick={() => setIsSettingsOpen((open) => !open)}
         >
-          Device Settings
+          {isSettingsOpen ? "Close Settings" : "Manage Devices"}
         </button>
       </div>
-      
+
       {isSettingsOpen && (
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Device settings"
+          aria-label="Manage device"
           className="device-modal__backdrop"
         >
           <div className="device-modal__panel">
             <div className="device-modal__section-tabs">
+              <button
+                type="button"
+                className={
+                  settingsTab === "select"
+                    ? "device-modal__section device-modal__section--active"
+                    : "device-modal__section"
+                }
+                onClick={() => setSettingsTab("select")}
+              >
+                Select Device
+              </button>
+
               <button
                 type="button"
                 className={
@@ -96,7 +122,7 @@ export function DeviceCard({
                 }
                 onClick={() => setSettingsTab("add")}
               >
-                Add device
+                Add Device
               </button>
 
               <button
@@ -108,9 +134,33 @@ export function DeviceCard({
                 }
                 onClick={() => setSettingsTab("remove")}
               >
-                Remove device
+                Remove Device
               </button>
             </div>
+
+            {settingsTab === "select" && (
+              <div className="device-modal__inputs">
+                <div className="device-modal__hint">
+                  Select the active HANA device.
+                </div>
+
+                <select
+                  className="device-card__select"
+                  disabled={disabled || devices.length === 0}
+                  value={selectedId ?? ""}
+                  onChange={(e) => onSelect(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select Device…
+                  </option>
+                  {devices.map((d) => (
+                    <option key={d.deviceId} value={d.deviceId}>
+                      {d.name} ({d.deviceId})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {settingsTab === "add" ? (
               <div className="device-modal__inputs">
@@ -155,21 +205,11 @@ export function DeviceCard({
                   >
                     Add Device
                   </button>
-
-                  <button
-                    className="device-card__button"
-                    type="button"
-                    onClick={closeSettings}
-                  >
-                    Cancel
-                  </button>
                 </div>
               </div>
-            ) : (
+            ) : settingsTab === "remove" ? (
               <div className="device-modal__inputs">
-                <div className="device-modal__hint">
-                  Select device to remove.
-                </div>
+                <div className="device-modal__hint">Select device to remove.</div>
 
                 <select
                   className="device-card__select"
@@ -178,7 +218,7 @@ export function DeviceCard({
                   onChange={(e) => setRemoveId(e.target.value)}
                 >
                   <option value="" disabled>
-                    Select device...
+                    Select Device...
                   </option>
                   {devices.map((d) => (
                     <option key={d.deviceId} value={d.deviceId}>
@@ -200,19 +240,11 @@ export function DeviceCard({
                       closeSettings();
                     }}
                   >
-                    Remove
-                  </button>
-
-                  <button
-                    className="device-card__button"
-                    type="button"
-                    onClick={closeSettings}
-                  >
-                    Cancel
+                    Remove Device
                   </button>
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       )}

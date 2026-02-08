@@ -22,29 +22,20 @@ export function ImageInputCard({
     <div className="image-card">
       <div className="image-card__header">
         <div>
-          <div className="image-card__title">Upload Image</div>
+          <div className="image-card__title">Capture</div>
           <div className="image-card__subtitle">
-            Upload an image (or capture from camera on supported devices).
+            Capture image from camera on HANA device.
           </div>
         </div>
 
         <div>
           <button
             className="image-card__button"
-            onClick={() => inputRef.current?.click()}
-            disabled={isBusy}
-            type="button"
-          >
-            Choose Image
-          </button>
-
-          <button
-            className="image-card__button"
             onClick={onTakePhoto}
             disabled={isBusy}
             type="button"
           >
-            Take Photo
+            Capture Image
           </button>
 
           {imageUrl && (
@@ -81,9 +72,7 @@ export function ImageInputCard({
             className="image-card__image"
           />
         ) : (
-          <div className="image-card__placeholder">
-            No Image Selected
-          </div>
+          <div className="image-card__placeholder"></div>
         )}
       </div>
     </div>
