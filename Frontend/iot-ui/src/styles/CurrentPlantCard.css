@@ -16,6 +16,9 @@
 .current-plant-card__name {
   color: rgba(255, 255, 255, 0.8);
   font-weight: 650; 
+  font-size: 1.5rem;
+  width: 100%;
+  text-align: center;
 }
 
 .current-plant-card__button {
