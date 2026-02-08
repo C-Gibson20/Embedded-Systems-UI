@@ -78,7 +78,7 @@ export default function App() {
     }
 
     refresh();
-    if (selectedDevice) timer = window.setInterval(refresh, 30000);
+    if (selectedDevice) timer = window.setInterval(refresh, 10000);
 
     return () => {
       cancelled = true;
@@ -212,7 +212,7 @@ export default function App() {
     }
 
     refresh();
-    if (selectedDevice) timer = window.setInterval(refresh, 60000);
+    if (selectedDevice) timer = window.setInterval(refresh, 10000);
 
     return () => {
       cancelled = true;

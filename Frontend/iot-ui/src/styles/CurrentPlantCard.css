@@ -13,6 +13,11 @@
   font-weight: 650; 
 }
 
+.current-plant-card__name {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 650; 
+}
+
 .current-plant-card__button {
   width: 100%;
   border-radius: 0.5rem;

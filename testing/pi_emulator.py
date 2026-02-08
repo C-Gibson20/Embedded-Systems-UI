@@ -25,6 +25,10 @@ class PiEmulator:
         self._stop = False
         self.ws = None
 
+        self.sensor_interval_sec = 10
+        self._sensor_thread_stop = threading.Event()
+        self._sensor_thread = None
+
         ws_base = to_ws_url(self.base_url)
         self.ws_url = f"{ws_base}/api/v1/ws/pi?device_id={self.device_id}&es_pi_key={self.pi_key}&device_secret={self.device_secret}"
         print(f"[WS] WebSocket URL: {self.ws_url}")
@@ -84,10 +88,12 @@ class PiEmulator:
 
         def on_open(ws):
             print(f"[WS] Connected: {self.ws_url}")
-
-            self._sensor_thread_stop.clear()
-            self._sensor_thread = threading.Thread(target=self._sensor_loop, args=(ws,), daemon=True)
-            self._sensor_thread.start()
+            try:
+                self._sensor_thread_stop.clear()
+                self._sensor_thread = threading.Thread(target=self._sensor_loop, args=(ws,), daemon=True)
+                self._sensor_thread.start()
+            except Exception as e:
+                print(f"[WS] Sensor thread error: {e}")
 
         def on_message(ws, message):
             try:

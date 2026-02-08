@@ -35,10 +35,15 @@ export function CurrentPlantCard({
   return (
     <div className="current-plant-card">
       <div className="current-plant-card__header">
-        <div>
           <div className="current-plant-card__title">Plant</div>
           <div className="current-plant-card__subtitle">{subtitle}</div>
-        </div>
+      
+          {currentPlantName && (
+            <div className="current-plant-card__plant">
+              <div className="current-plant-card__name">{currentPlantName}</div>
+            </div>
+          )}
+      </div>
 
         <button
           className="current-plant-card__button"
@@ -48,13 +53,7 @@ export function CurrentPlantCard({
         >
           {buttonLabel}
         </button>
-      </div>
-
-      {currentPlantName && (
-        <div className="current-plant-card__plant">
-          <div className="current-plant-card__name">{currentPlantName}</div>
-        </div>
-      )}
+      
     </div>
   );
 }
