@@ -62,7 +62,7 @@
 .image-card__image {
   display: block;
   object-fit: contain;
-  max-width: 100%;
+  width: 100%;
   max-height: 16rem;
 
   border-radius: 0.5rem;
