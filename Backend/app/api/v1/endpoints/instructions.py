@@ -28,11 +28,17 @@ async def dispatch_instructions(
     
     instr = instruction_store.create_instruction(device_id, payload.job_id)
 
+    pairs = [notes.split(": ") for notes in payload.notes]
+    
+    notes_dict = {
+        key: value for key, value in pairs
+    }
+
     msg = {
         "type": "apply instructions",
         "instruction_id": instr.instruction_id,
         "job_id": payload.job_id,
-        "notes": payload.notes
+        "notes": notes_dict
     }
     
     ok = await pi_connection_manager.send_instructions(device_id, msg)
