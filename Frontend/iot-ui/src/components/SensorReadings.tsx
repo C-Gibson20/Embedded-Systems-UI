@@ -15,7 +15,7 @@ export function Meter({
     <div className="meter">
       <div className="meter__header">
         <div className="meter__label">{label}</div>
-        <div className="meter__value">{value}%</div>
+        <div className="meter__value">{Math.round(value)}%</div>
       </div>
 
       <div className="meter__track">

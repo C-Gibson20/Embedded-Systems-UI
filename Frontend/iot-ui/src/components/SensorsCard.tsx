@@ -23,7 +23,6 @@ export function SensorsCard({
   sensors,
 }: Props) {
 
-  const updated = sensors?.water.status === "ok" || sensors?.light.status === "ok";
   const mostRecentUpdate = sensors
     ? Math.max(
         sensors.water.status === "ok" ? sensors.water.updatedAt : 0,
