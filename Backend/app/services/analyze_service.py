@@ -37,7 +37,7 @@ def analyze_image(_image_bytes: bytes) -> AnalysisResult:
     care_advice = plant_care_df.loc[label]
     notes.append(f"Light Requirements: {care_advice['Light Requirement']}")
     notes.append(f"Moisture Requirements: {care_advice['Moisture Requirement']}")
-    if conf_val < 0.7:
+    if conf_val < 0.2:
         notes.append("The model is not very confident about this prediction. Consider retaking the photo under better lighting or different angles.")
 
     return AnalysisResult(

@@ -77,9 +77,9 @@ export function ResultsCard({
               <div className="results-card__label">
                 {result.label}
               </div>
-              <div className="results-card__confidence">
+              {/* <div className="results-card__confidence">
                 {(result.confidence * 100).toFixed(1)}% confidence
-              </div>
+              </div> */}
             </div>
 
             <ul className="results-card__notes">

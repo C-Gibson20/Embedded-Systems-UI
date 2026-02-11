@@ -177,7 +177,7 @@ export default function App() {
 
     const notesWithMaturation = [
       ...result.notes,
-      `Maturation stage: ${maturation}`,
+      `Maturation Stage: ${maturation}`,
     ];
 
     try {
