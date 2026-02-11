@@ -28,7 +28,7 @@ async def dispatch_instructions(
     
     instr = instruction_store.create_instruction(device_id, payload.job_id)
 
-    pairs = [notes.split(": ") for notes in payload.notes]
+    pairs = [note.split(": ", 1) for note in payload.notes]
     
     notes_dict = {
         key: value for key, value in pairs

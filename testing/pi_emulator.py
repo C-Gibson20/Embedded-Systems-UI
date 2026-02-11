@@ -157,7 +157,7 @@ class PiEmulator:
             self.ws.close()
 
 base_url = "https://embedded-systems-ui.onrender.com"
-device_id = "pi-01"
+device_id = "pi-02"
 pi_key = "***REMOVED***"
 device_secret = "***REMOVED***"
 image_path = "sample_plant.png"  
