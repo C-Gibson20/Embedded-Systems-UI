@@ -117,7 +117,7 @@ class PiSystem:
                     if (light_hours or sensor_dict["light"] > self.light_threshold) and self.current_brightness != 0:
                         def get_current_moisture():
                                 for s in self.sensors:
-                                    if isinstance(s, SoilSensor):
+                                    if s.reading_name == "water":
                                         try:
                                             return s.take_single_reading()
                                         except Exception as e:
@@ -139,7 +139,7 @@ class PiSystem:
 
     def translate_requirements(self):
         moisture_requirement = self.settings["Moisture Requirements"]
-        moisture_threshold_dict = {"Low" : 30, "Medium" : 50, "High" : 70}
+        moisture_threshold_dict = {"Low" : 30, "Medium" : 50, "High" : 75}
         try:
             self.moisture_threshold = moisture_threshold_dict[moisture_requirement]
         except ValueError:
