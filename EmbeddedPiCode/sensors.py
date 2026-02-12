@@ -7,7 +7,6 @@ class Sensor:
         self.bus = bus
         self.device_address = None 
         self.reading_name = "Not Implemented" 
-        self.active = True
         self.min_value = 0
         self.max_value = 0
 
@@ -21,12 +20,6 @@ class Sensor:
     
     def take_unscaled_reading(self):
         raise NotImplementedError
-
-    def activate(self):
-        self.active = True
-
-    def deactivate(self):
-        self.active = False
 
 class SpectralSensor(Sensor):
     
