@@ -49,14 +49,14 @@ jobs:
 
       - name: Build Marketing Site
         run: |
-          cd marketing_site
+          cd marketing_site/Marketing
           npm install
           npm run build
 
       - name: Inject Marketing Site
         run: |
           mkdir -p Frontend/iot-ui/dist/marketing
-          cp -r marketing_site/dist/* Frontend/iot-ui/dist/marketing/
+          cp -r marketing_site/Marketing/dist/* Frontend/iot-ui/dist/marketing/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
