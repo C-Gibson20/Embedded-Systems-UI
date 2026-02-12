@@ -1,0 +1,6 @@
+/* App-specific styles - most styling is done via Tailwind in index.css */
+.image-panel-text {
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.75),
+    0 4px 18px rgba(0, 0, 0, 0.55);
+}
