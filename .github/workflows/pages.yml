@@ -19,8 +19,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Main Branch
         uses: actions/checkout@v4
+
+      - name: Checkout Marketing Branch
+        uses: actions/checkout@v4
+        with:
+          ref: marketing_site
+          path: marketing_site
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -33,13 +39,18 @@ jobs:
         working-directory: Frontend/iot-ui
         run: npm ci
 
-      - name: Build
+      - name: Build Main Site
         working-directory: Frontend/iot-ui
         env:
           VITE_API_BASE: ${{ secrets.VITE_API_BASE }}
           VITE_FRONTEND_KEY: ${{ secrets.VITE_FRONTEND_KEY }}
           VITE_STORAGE_KEY: ${{ secrets.VITE_STORAGE_KEY }}
         run: npm run build
+
+      - name: Inject Marketing Site
+        run: |
+          mkdir -p Frontend/iot-ui/dist/marketing
+          cp -r marketing_site/* Frontend/iot-ui/dist/marketing/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
