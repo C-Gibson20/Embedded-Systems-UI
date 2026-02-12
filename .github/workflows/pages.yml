@@ -47,10 +47,16 @@ jobs:
           VITE_STORAGE_KEY: ${{ secrets.VITE_STORAGE_KEY }}
         run: npm run build
 
+      - name: Build Marketing Site
+        run: |
+          cd marketing_site
+          npm install
+          npm run build
+
       - name: Inject Marketing Site
         run: |
           mkdir -p Frontend/iot-ui/dist/marketing
-          cp -r marketing_site/* Frontend/iot-ui/dist/marketing/
+          cp -r marketing_site/dist/* Frontend/iot-ui/dist/marketing/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
