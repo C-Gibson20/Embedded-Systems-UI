@@ -35,7 +35,7 @@ class PiSystem:
         self._stop = False
         self.ws = None
 
-        self.sensor_interval_sec = 5 
+        self.sensor_interval_sec = 600
         self._sensor_thread_stop = threading.Event()
         self._sensor_thread = None
         
