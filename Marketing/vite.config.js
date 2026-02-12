@@ -4,5 +4,5 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/embeddedWebsite/",
+  base: "http://c-gibson20.github.io/Embedded-Systems-UI/marketing",
 });
