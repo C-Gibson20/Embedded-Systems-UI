@@ -21,6 +21,7 @@ import lighting from "/assets/lighting.png";
 import harshConditions from "/assets/harsh_conditions.png";
 import website from "/assets/website.mp4";
 import sensorReadings from "/assets/sensor_readings.png";
+import architecture from "/assets/architecture.png";
 import React from "react";
 
 function Navbar() {
@@ -616,6 +617,13 @@ function Team() {
               <p className="text-glass-dim text-sm">{member.role}</p>
             </div>
           ))}
+        </div>
+        <div className="mt-6 glass-card rounded-xl p-6 flex justify-center items-center">
+          <img 
+            src={architecture} 
+            alt="System Architecture" 
+            className="w-full h-auto max-h-[500px] object-contain rounded-lg" 
+          />
         </div>
       </div>
     </section>
