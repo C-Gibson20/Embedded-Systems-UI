@@ -50,7 +50,11 @@ class PiSystem:
         
         # WebSocket URL construction
         ws_base = to_ws_url(self.base_url)
-        self.ws_url = f"{ws_base}/api/v1/ws/pi?device_id={self.device_id}&es_pi_key={self.pi_key}&device_secret={self.device_secret}"
+        self.ws_url = f"{ws_base}/api/v1/ws/pi?device_id={self.device_id}"
+        self.ws_headers = [
+            f"ES-Pi-Key: {self.pi_key}",
+            f"ES-Device-Secret: {self.device_secret}",
+        ]
         
         # Settings initialization
         self.settings = {"Moisture Requirements":[],"Light Requirements":[],"Maturation Stage" : []}
@@ -353,6 +357,7 @@ class PiSystem:
             # Initialize and run the WebSocket connection with the defined event handlers for open, message, error, and close events.
             self.ws = websocket.WebSocketApp(
                 self.ws_url,
+                header=self.ws_headers,
                 on_open=on_open,
                 on_message=on_message,
                 on_error=on_error,
@@ -373,10 +378,10 @@ class PiSystem:
 if __name__ == "__main__":
 
     bus = smbus2.SMBus(1)
-    base_url = "https://embedded-systems-ui.onrender.com"
-    device_id = "pi-01"
-    pi_key = "***REMOVED***"
-    device_secret = "***REMOVED***"
+    base_url = os.environ.get("ES_API_BASE", "https://embedded-systems-ui.onrender.com")
+    device_id = os.environ.get("ES_DEVICE_ID", "pi-01")
+    pi_key = os.environ["ES_PI_KEY"]
+    device_secret = os.environ["ES_DEVICE_SECRET"]
     image_path = "sample_plant.png"  
     csv_path = "care_settings.csv"
     sensors = [SpectralSensor(bus), SoilSensor(bus)] 

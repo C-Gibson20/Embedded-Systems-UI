@@ -30,7 +30,11 @@ class PiEmulator:
         self._sensor_thread = None
 
         ws_base = to_ws_url(self.base_url)
-        self.ws_url = f"{ws_base}/api/v1/ws/pi?device_id={self.device_id}&es_pi_key={self.pi_key}&device_secret={self.device_secret}"
+        self.ws_url = f"{ws_base}/api/v1/ws/pi?device_id={self.device_id}"
+        self.ws_headers = [
+            f"ES-Pi-Key: {self.pi_key}",
+            f"ES-Device-Secret: {self.device_secret}",
+        ]
         print(f"[WS] WebSocket URL: {self.ws_url}")
 
     def upload_image(self, job_id):
@@ -143,6 +147,7 @@ class PiEmulator:
         while not self._stop:
             self.ws = websocket.WebSocketApp(
                 self.ws_url,
+                header=self.ws_headers,
                 on_open=on_open,
                 on_message=on_message,
                 on_error=on_error,
@@ -156,10 +161,10 @@ class PiEmulator:
         if self.ws:
             self.ws.close()
 
-base_url = "https://embedded-systems-ui.onrender.com"
-device_id = "pi-02"
-pi_key = "***REMOVED***"
-device_secret = "***REMOVED***"
+base_url = os.environ.get("ES_API_BASE", "https://embedded-systems-ui.onrender.com")
+device_id = os.environ.get("ES_DEVICE_ID", "pi-02")
+pi_key = os.environ["ES_PI_KEY"]
+device_secret = os.environ["ES_DEVICE_SECRET"]
 image_path = "sample_plant.png"  
 
 emu = PiEmulator(

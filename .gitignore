@@ -1,0 +1,21 @@
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+
+# JavaScript dependencies and builds
+node_modules/
+dist/
+
+# Training output and large generated model files
+lightning_logs/
+*.ckpt
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/

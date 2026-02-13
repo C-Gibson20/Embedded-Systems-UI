@@ -26,6 +26,38 @@ ML/
 
 ---
 
+Great — that’s a strong result 👏
+
+Here’s a clean, professional way to add this to your **ML README**.
+
+---
+
+# Model Evaluation
+
+## Final Test Performance
+
+After fine-tuning, the final model achieved the following performance on the held-out test set:
+
+* **Test Accuracy:** `97.78%`
+* **Test Loss:** `0.1612`
+
+Raw evaluation output:
+
+```python
+[{'test_loss': 0.1611717790365219, 
+  'test_acc': 0.9777777791023254}]
+```
+
+### Interpretation
+
+* A **97.78% test accuracy** demonstrates strong class separability for the 6-class prototype dataset.
+* The **low test loss (0.16)** indicates confident and well-calibrated predictions.
+* Performance is sufficient for proof-of-concept IoT deployment.
+
+<br>
+
+---
+
 ## Dataset
 
 ### Custom Curated Image Database

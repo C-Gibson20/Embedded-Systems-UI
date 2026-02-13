@@ -289,11 +289,15 @@ This ensures:
 
 # Authentication
 
-WebSocket connection includes:
+Set the following environment variables before starting the Pi client:
 
-* `device_id`
-* `es_pi_key`
-* `device_secret`
+* `ES_API_BASE`
+* `ES_DEVICE_ID`
+* `ES_PI_KEY`
+* `ES_DEVICE_SECRET`
+
+The device ID is sent as a WebSocket query parameter. Credentials are sent in
+the `ES-Pi-Key` and `ES-Device-Secret` headers so they are not included in URLs
+or normal access logs.
 
 Backend verifies pairing before accepting communication.
-

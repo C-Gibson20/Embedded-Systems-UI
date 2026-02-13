@@ -1,6 +1,6 @@
 import os
 import json
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
+from fastapi import APIRouter, Header, WebSocket, WebSocketDisconnect, Query
 from app.core.pi_connection_manager import pi_connection_manager
 from app.core.instruction_store import instruction_store
 from app.core.sensor_store import sensor_store, SensorValue
@@ -37,8 +37,8 @@ PI_KEY = os.environ.get("PI_KEY", "")
 async def pi_ws(
     websocket: WebSocket,
     device_id: str = Query(...),
-    es_pi_key: str = Query(...),
-    device_secret: str = Query(...)
+    es_pi_key: str = Header(..., alias="ES-Pi-Key"),
+    device_secret: str = Header(..., alias="ES-Device-Secret"),
 ):
     """
     WebSocket endpoint for Raspberry Pi devices to connect and receive instructions.
