@@ -14,6 +14,9 @@ HANA is a full-stack intelligent plant care system that combines:
 
 The system identifies a plant using AI and automatically adjusts watering and lighting according to care requirements.
 
+Find UI at: https://c-gibson20.github.io/Embedded-Systems-UI/ <br>
+Find Marketing site at: https://c-gibson20.github.io/Embedded-Systems-UI/marketing/
+
 ---
 
 # System Overview
