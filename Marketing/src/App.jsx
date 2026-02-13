@@ -589,6 +589,13 @@ function Specifications() {
             </div>
           </div>
         </div>
+        <div className="mt-6 glass-card rounded-xl p-6 flex justify-center items-center">
+          <img 
+            src={architecture} 
+            alt="System Architecture" 
+            className="w-full h-auto max-h-[500px] object-contain rounded-lg" 
+          />
+        </div>
       </div>
     </section>
   );
@@ -617,13 +624,6 @@ function Team() {
               <p className="text-glass-dim text-sm">{member.role}</p>
             </div>
           ))}
-        </div>
-        <div className="mt-6 glass-card rounded-xl p-6 flex justify-center items-center">
-          <img 
-            src={architecture} 
-            alt="System Architecture" 
-            className="w-full h-auto max-h-[500px] object-contain rounded-lg" 
-          />
         </div>
       </div>
     </section>
