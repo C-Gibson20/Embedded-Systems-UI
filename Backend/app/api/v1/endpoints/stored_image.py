@@ -6,6 +6,11 @@ router = APIRouter()
 
 @router.get("/pi/stored_image/{job_id}")
 def get_stored_image(job_id: str):
+    """
+    Retrieve the stored image result for a completed job by its ID.
+    Returns the image data with appropriate content type if found and handles errors.
+    """
+    # Fetch the stored image for this job ID from the store and handle cases where no image is found
     img = image_store.get_image(job_id)
     if not img:
         raise HTTPException(status_code=404, detail="No image found for this job.")

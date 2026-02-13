@@ -1,6 +1,7 @@
 import type { SensorsResponse } from "../Types";
 import { API_BASE, FRONTEND_KEY } from "../base";
 
+// Fetches the current sensor readings from the backend for a specific device
 export async function fetchSensors(deviceId: string, pairingSecret: string): Promise<SensorsResponse> {
   const res = await fetch(`${API_BASE}/api/v1/sensors/${encodeURIComponent(deviceId)}`, {
     headers: {

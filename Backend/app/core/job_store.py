@@ -6,6 +6,13 @@ import time
 
 @dataclass
 class Job:
+    """Data class representing a job created for a device, including its:
+        - unique job ID, 
+        - associated device ID, 
+        - current status, 
+        - creation timestamp,
+        - optional result or error information.
+    """
     job_id: str
     device_id: str
     status: str # "capturing" | "processing" | "completed" | "error"

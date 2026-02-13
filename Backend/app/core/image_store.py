@@ -4,6 +4,11 @@ import time
 
 @dataclass
 class ImageData:
+    """Data class representing an image stored in memory including its: 
+        - content type, 
+        - binary data, 
+        - the timestamp of when it was last updated.
+    """
     content_type: str
     data: bytes
     updated_at: float

@@ -1,6 +1,7 @@
 import type { InstructionDispatchResponse, InstructionStatusResponse } from "../Types";
 import { API_BASE, FRONTEND_KEY } from "../base"; 
 
+// Helper to check the current execution state of a specific instruction on the Pi.
 async function getStatus(
     deviceId: string, 
     pairingSecret: string,
@@ -16,6 +17,7 @@ async function getStatus(
     return res.json();
 }
 
+// Sends configuration notes to the Pi and polls until confirmation of successful application
 export async function sendInstructions(
     deviceId: string,
     pairingSecret: string,
@@ -26,6 +28,7 @@ export async function sendInstructions(
     const timeoutMs = opts?.timeoutMs ?? 30000;
     const pollMs = opts?.pollMs ?? 1000;
 
+    // Dispatch the instructions to the backend
     const dispatch = await fetch(`${API_BASE}/api/v1/instructions?device_id=${encodeURIComponent(deviceId)}`, {
         method: "POST",
         headers: {
@@ -41,10 +44,12 @@ export async function sendInstructions(
 
     const instructionId = dispatched.instruction_id;
 
+    // Poll the status endpoint until the Pi acknowledges the update
     const startTime = Date.now();
     while (Date.now() - startTime < timeoutMs) {
         const s = await getStatus(deviceId, pairingSecret, instructionId);
 
+        // Terminate on success or error status, otherwise keep polling
         if (s.status === "applied") return s.message ?? "Instructions applied successfully.";
         if (s.status === "error") throw new Error(s.error ?? "Error applying instructions.");
 

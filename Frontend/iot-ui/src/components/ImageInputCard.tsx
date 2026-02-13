@@ -16,6 +16,7 @@ export function ImageInputCard({
   onClear,
   isBusy,
 }: Props) {
+  // --- Refs ---
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   return (

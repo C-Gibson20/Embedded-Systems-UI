@@ -1,6 +1,7 @@
 import { API_BASE, FRONTEND_KEY } from "../base";
 import type { DeviceStatusResponse } from "../Types";
 
+// Fetches the current connectivity status of a device from the backend
 export async function fetchDeviceStatus(
   deviceId: string,
   pairingSecret: string

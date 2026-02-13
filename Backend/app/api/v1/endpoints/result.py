@@ -5,6 +5,10 @@ router = APIRouter()
 
 @router.get("/result/{device_id}")
 def get_result(device_id: str):
+    """
+    Retrieve the result or status of a completed job for a specified device.
+    """
+    # Fetch current job result from store and handle cases where no job or result is found
     payload = jobs.get_job_payload(device_id)
     if not payload:
         raise HTTPException(status_code=404, detail="No job found for this device.")

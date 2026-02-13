@@ -58,15 +58,16 @@ export function PlantPanel({
 
   collapseKey,
 }: Props) {
+  // --- UI State --- 
   const [isManaging, setIsManaging] = useState(false);
+  const canManage = !!selectedDeviceId && deviceStatus === "paired";
+  const manageLabel = currentPlantName ? "Manage Plant" : "Identify Plant";
 
+  // Reset management panel when device selection changes or panel is collapsed
   useEffect(() => {
     setIsManaging(false);
   }, [collapseKey]);
 
-  const canManage = !!selectedDeviceId && deviceStatus === "paired";
-  const manageLabel = currentPlantName ? "Manage Plant" : "Identify Plant";
-  
   return (
     <div className="plant-panel">
       <CurrentPlantCard

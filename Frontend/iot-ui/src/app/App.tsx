@@ -15,18 +15,20 @@ import { fetchSensors } from "../lib/api/sensors";
 import "../styles/App.css";
 
 export default function App() {
+  // --- UI and Analysis Sate ---
   const [file, setFile] = useState<File | null>(null);
-  
   const [isBusy, setIsBusy] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [hasRunForCurrentImage, setHasRunForCurrentImage] = useState(false);
   const canAnalyze = useMemo(() => !!file && !isBusy, [file, isBusy]);
 
+  // --- Image Handling ---
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [piImageUrl, setPiImageUrl] = useState<string | null>(null);
   const displayImageUrl = imageUrl ?? piImageUrl;
 
+  // --- Device Management ---
   const [devices, setDevices] = useState<SavedDevice[]>(() => loadDevices());
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(
     () => loadDevices()[0]?.deviceId ?? null
@@ -34,15 +36,16 @@ export default function App() {
   const selectedDevice = devices.find(d => d.deviceId === selectedDeviceId) ?? null;
   const [deviceStatus, setDeviceStatus] = useState<DeviceStatus>("unknown");
 
+  // --- Instruction and Telemetry State ---
   const [isApplyingInstructions, setIsApplyingInstructions] = useState(false);
   const [activeJobId, setActiveJobId] = useState<string | null>(null);
   const [hasUploaded, setHasUploaded] = useState(false);
   const showRunButton = !!file && !hasRunForCurrentImage;
-  
   const [maturation, setMaturation] = useState<Maturation>("Mature");
   const [currentPlantName, setCurrentPlantName] = useState<string | null>(null);
   const [sensors, setSensors] = useState<SensorsResponse | null>(null);
   
+  // Create local preview URL for the selected file (development only)
   useEffect(() => {
     if (!file) {
       setImageUrl(null);
@@ -53,11 +56,13 @@ export default function App() {
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
+  // Sync devices to local storage
   useEffect(() => {
     saveDevices(devices);
     if (!selectedDeviceId && devices[0]) setSelectedDeviceId(devices[0].deviceId);
   }, [devices, selectedDeviceId]);
 
+  // Polling for device connection status
   useEffect(() => {
     let cancelled = false;
     let timer: number | undefined;
@@ -86,6 +91,7 @@ export default function App() {
     };
   }, [selectedDevice?.deviceId, selectedDevice?.pairingSecret]);
 
+  // Fetch plant data when selected device changes
   useEffect(() => {
     let cancelled = false;
 
@@ -109,6 +115,7 @@ export default function App() {
     };
   }, [selectedDevice?.deviceId]);
 
+  // Analyse manually uploaded image (development only)
   async function runAnalysis() {
     if (!file || isBusy) return;
 
@@ -128,6 +135,7 @@ export default function App() {
     }
   }
 
+  // Trigger remote Pi capture and poll for the resulting analysis
   async function runAnalysisCapture() {
     if (isBusy) return;
 
@@ -159,6 +167,7 @@ export default function App() {
     }
   }
 
+  // Send care instructions back to Pi for automated care
   async function uploadInstructions() {
     if (!result || isApplyingInstructions || isBusy) return;
 
@@ -192,6 +201,7 @@ export default function App() {
     }
   }
 
+  // Polling for sensor data
   useEffect(() => {
     let cancelled = false;
     let timer: number | undefined;
@@ -220,6 +230,7 @@ export default function App() {
     };
   }, [selectedDevice?.deviceId, selectedDevice?.pairingSecret]);
 
+  // Reset session states and data
   function clearAll() {
     setFile(null);
     setPiImageUrl(null);

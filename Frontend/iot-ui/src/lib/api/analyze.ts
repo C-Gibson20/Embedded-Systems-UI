@@ -1,6 +1,7 @@
 import type { AnalysisResult } from "../Types";
 import { API_BASE } from "../base"; 
 
+// Uploads an image file to the backend for plant identification and analysis 
 export async function analyzeImage(file: File): Promise<AnalysisResult> {
   const formData = new FormData();
   formData.append("file", file);
@@ -10,6 +11,7 @@ export async function analyzeImage(file: File): Promise<AnalysisResult> {
     body: formData,
   });
 
+  // Check if the response is successful
   if (!response.ok) {
     let detail = "Analysis failed";
     try {

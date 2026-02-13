@@ -34,6 +34,7 @@ export function ResultsCard({
   canUploadInstructions, 
   hasUploaded 
 }: Props) {
+  // --- UI State ---
   const uploadDisabled = isBusy || hasUploaded || isApplyingInstructions;
 
   return (

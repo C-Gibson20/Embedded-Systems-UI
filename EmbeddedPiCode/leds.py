@@ -3,6 +3,9 @@ import board
 
 class Leds:
     def __init__(self, pixel_pin, num_pixels):
+        """
+        Initializes the Leds object with the specified pixel pin and number of pixels.
+        """
         self.pixel_pin = pixel_pin
         self.num_pixels = num_pixels
         self.brightness = 0
@@ -14,6 +17,9 @@ class Leds:
         )
 
     def change_brightness(self, brightness, color):
+        """
+        Changes the brightness and color of the LEDs.
+        """
         print(f"Changing brightness to {brightness}, with color {color}")
         self.brightness = brightness
         self.pixels.brightness = self.brightness

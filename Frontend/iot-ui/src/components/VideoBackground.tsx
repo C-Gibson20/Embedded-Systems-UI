@@ -16,7 +16,6 @@ export function VideoBackground({ dim = 0.45 }: Props) {
         preload="auto"
       />
 
-      {/* dark overlay for readability */}
       <div
         className="absolute inset-0"
         style={{ backgroundColor: `rgba(0,0,0,${dim})` }}

@@ -22,7 +22,7 @@ function timeAgo(lastUpdated: Date) {
 export function SensorsCard({
   sensors,
 }: Props) {
-
+  // --- Last Sensor Update ---
   const mostRecentUpdate = sensors
     ? Math.max(
         sensors.water.status === "ok" ? sensors.water.updatedAt : 0,

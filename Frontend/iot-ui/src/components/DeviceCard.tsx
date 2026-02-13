@@ -22,17 +22,19 @@ export function DeviceCard({
   disabled,
   deviceStatus,
 }: Props) {
+  // --- UI State ---
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [settingsTab, setSettingsTab] = useState<"select" | "add" | "remove">(
     "select"
   );
-
+  
+  // --- Form state for devices ---
   const [name, setName] = useState("");
   const [deviceId, setDeviceId] = useState("");
   const [pairingSecret, setPairingSecret] = useState("");
-
   const [removeId, setRemoveId] = useState<string>("");
 
+  // Memoized lookups for current selection and form validation
   const selectedDevice = useMemo(
     () => devices.find((d) => d.deviceId === selectedId) ?? null,
     [devices, selectedId]
@@ -48,6 +50,7 @@ export function DeviceCard({
     return !!id;
   }, [removeId, selectedId]);
 
+  // Reset modal state on exit
   function closeSettings() {
     setIsSettingsOpen(false);
     setSettingsTab("select");
