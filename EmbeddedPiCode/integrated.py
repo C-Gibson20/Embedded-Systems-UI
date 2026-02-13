@@ -190,7 +190,7 @@ class PiSystem:
 
         # Translate the moisture requirement into a numeric threshold using a predefined mapping.
         moisture_requirement = self.settings["Moisture Requirements"]
-        moisture_threshold_dict = {"Low" : 30, "Medium" : 50, "High" : 75}
+        moisture_threshold_dict = {"Low" : 10, "Medium" : 33, "High" : 66}
         try:
             self.moisture_threshold = moisture_threshold_dict[moisture_requirement]
         except ValueError:
